@@ -1,5 +1,15 @@
-import express = require("express");
-import cors = require("cors");
+declare global {
+  namespace Express {
+    interface Request {
+      userId: string;
+    }
+  }
+}
+
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+dotenv.config();
 
 const PORT = process.env.PORT || 3000;
 
@@ -15,6 +25,9 @@ app.use(cors());
 app.get("/health", (_req, res) => {
   res.send("ok");
 });
+
+// ROUTES
+app.use("/api/auth", require("./routes/auth"));
 
 // 404 route not found
 app.use("/", (_req, res, _next) => {
