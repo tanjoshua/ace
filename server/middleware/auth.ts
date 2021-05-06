@@ -1,10 +1,12 @@
 import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
+
+import User, { IUser } from "../models/User";
 import HttpError from "../errors/HttpError";
-import { jwtKey } from "../utils/config";
+import { verifyToken } from "../utils/tokenService";
 
 // token will be in the Authorization header eg. Bearer <token>
-export default (req: Request, res: Response, next: NextFunction) => {
+export default async (req: Request, _res: Response, next: NextFunction) => {
   const authorization = req.get("Authorization");
 
   // no token attached
@@ -14,15 +16,17 @@ export default (req: Request, res: Response, next: NextFunction) => {
   }
 
   // parse token
-  const token = authorization.split(" ")[1];
-  const parsedToken = jwt.verify(token, jwtKey);
+  const encryptedToken = authorization.split(" ")[1];
+  const token = verifyToken(encryptedToken);
 
-  // not authenticated
-  if (!parsedToken) {
-    throw new HttpError(401, "Unauthorized");
+  // retrieve user data
+  const user = await User.findById(token.userId);
+
+  if (!user) {
+    throw new HttpError(401, "Unauthorized - User not found");
   }
 
-  // valid token
-  req.userId = (<any>parsedToken).userId;
+  req.user = user;
+
   next();
 };

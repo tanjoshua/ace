@@ -1,17 +1,7 @@
-declare global {
-  namespace Express {
-    interface Request {
-      userId: string;
-    }
-  }
-}
-
 import express from "express";
+import mongoose from "mongoose";
 import cors from "cors";
-import dotenv from "dotenv";
-dotenv.config();
-
-const PORT = process.env.PORT || 3000;
+import { PORT, MDB_KEY } from "./utils/config";
 
 const app = express();
 
@@ -35,6 +25,10 @@ app.use("/", (_req, res, _next) => {
 });
 
 // start server
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+mongoose
+  .connect(MDB_KEY, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  });
