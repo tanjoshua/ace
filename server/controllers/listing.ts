@@ -50,4 +50,14 @@ export const replaceListing = async (req: Request, res: Response) => {
 
 // export const updateListing = async (req: Request, res: Response) => {};
 
-// export const deleteListing = async (req: Request, res: Response) => {};
+export const deleteListing = async (req: Request, res: Response) => {
+  const { id } = req.query;
+
+  const result = Listing.findByIdAndRemove(id);
+
+  if (!result) {
+    throw new HttpError(404, "Listing not found");
+  }
+
+  res.json(result);
+};
