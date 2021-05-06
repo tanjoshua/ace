@@ -4,6 +4,7 @@ import cors from "cors";
 import { PORT, MDB_KEY } from "./utils/config";
 
 import authRoutes from "./routes/auth";
+import listingRoutes from "./routes/listing";
 import HttpError from "./errors/HttpError";
 
 const app = express();
@@ -21,6 +22,7 @@ app.get("/health", (_req, res) => {
 
 // ROUTES
 app.use("/api/auth", authRoutes);
+app.use("/api/listing", listingRoutes);
 
 // 404 route not found
 app.use("/", (_req, res, _next) => {
