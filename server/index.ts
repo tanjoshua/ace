@@ -9,6 +9,9 @@ import HttpError from "./errors/HttpError";
 
 const app = express();
 
+// serve frontend
+app.use(express.static("build/client"));
+
 // body parser for json
 app.use(express.json());
 
@@ -25,7 +28,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/listing", listingRoutes);
 
 // 404 route not found
-app.use("/", (_req, res, _next) => {
+app.use((_req, res, _next) => {
   res.status(404).send("Route not found");
 });
 

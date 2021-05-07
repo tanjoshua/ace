@@ -1,0 +1,21 @@
+{
+  "name": "ace",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cd ./server && npm start",
+    "build": "cd ./server && npm run tsc && cd ../web-client && npm run build && rm -rf ../server/build/client && cp -r build ../server/build/client"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tanjoshua/ace.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tanjoshua/ace/issues"
+  },
+  "homepage": "https://github.com/tanjoshua/ace#readme"
+}
