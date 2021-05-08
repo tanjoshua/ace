@@ -5,6 +5,7 @@ import { PORT, MDB_KEY } from "./utils/config";
 
 import authRoutes from "./routes/auth";
 import listingRoutes from "./routes/listing";
+import userRoutes from "./routes/user";
 import HttpError from "./errors/HttpError";
 
 const app = express();
@@ -26,12 +27,14 @@ app.get("/health", (_req, res) => {
 // ROUTES
 app.use("/api/auth", authRoutes);
 app.use("/api/listing", listingRoutes);
+app.use("/api/user", userRoutes);
 
 // 404 route not found
 app.use((_req, res, _next) => {
   res.status(404).send("Route not found");
 });
 
+// error handler
 app.use((err: HttpError, _req: Request, res: Response, _next: NextFunction) => {
   const status = err.status || 500;
   const message = err.message;
