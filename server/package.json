@@ -23,10 +23,12 @@
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.22.0",
     "eslint": "^7.25.0",
-    "ts-node-dev": "^1.1.6",
+    "ts-node-dev": "^1.1.8",
     "typescript": "^4.2.4"
   },
   "dependencies": {
+    "@mikro-orm/core": "^4.5.7",
+    "@mikro-orm/mongodb": "^4.5.7",
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "dotenv": "^8.4.0",
@@ -34,6 +36,7 @@
     "express-async-errors": "^3.1.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.12.7",
-    "mongoose-paginate-v2": "^1.3.17"
+    "mongoose-paginate-v2": "^1.3.17",
+    "socket.io": "^4.0.2"
   }
 }
