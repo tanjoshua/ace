@@ -20,10 +20,4 @@ export class User extends BaseEntity {
     cascade: [Cascade.ALL],
   })
   listings = new Collection<Listing>(this);
-
-  constructor(name: string, email: string) {
-    super();
-    this.name = name;
-    this.email = email;
-  }
 }

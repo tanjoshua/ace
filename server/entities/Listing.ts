@@ -12,11 +12,4 @@ export class Listing extends BaseEntity {
 
   @Property()
   description: string;
-
-  constructor(title: string, tutor: User, description: string) {
-    super();
-    this.title = title;
-    this.tutor = tutor;
-    this.description = description;
-  }
 }

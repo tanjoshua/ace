@@ -1,5 +1,10 @@
 import express, { Request, Response, NextFunction } from "express";
-import { MikroORM } from "@mikro-orm/core";
+import {
+  MikroORM,
+  EntityManager,
+  EntityRepository,
+  RequestContext,
+} from "@mikro-orm/core";
 import cors from "cors";
 import { PORT, MDB_KEY, __prod__ } from "./utils/config";
 
@@ -9,13 +14,24 @@ import listingRoutes from "./routes/listing";
 import userRoutes from "./routes/user";
 import HttpError from "./errors/HttpError";
 
+export const DI = {} as {
+  orm: MikroORM;
+  em: EntityManager;
+  userRepository: EntityRepository<User>;
+  listingRepository: EntityRepository<Listing>;
+};
+
 const main = async () => {
-  await MikroORM.init({
+  // setup ORM
+  DI.orm = await MikroORM.init({
     entities: [User, Listing],
     clientUrl: MDB_KEY,
     type: "mongo",
     debug: !__prod__,
   });
+  DI.em = DI.orm.em;
+  DI.userRepository = DI.orm.em.getRepository(User);
+  DI.listingRepository = DI.orm.em.getRepository(Listing);
 
   const app = express();
   // serve frontend
@@ -24,6 +40,8 @@ const main = async () => {
   app.use(express.json());
   // cors
   app.use(cors());
+
+  app.use((_req, _res, next) => RequestContext.create(DI.orm.em, next));
 
   // health check
   app.get("/health", (_req, res) => {

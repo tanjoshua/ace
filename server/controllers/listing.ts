@@ -1,7 +1,10 @@
 import { Request, Response } from "express";
+import { wrap } from "@mikro-orm/core";
 
-import Listing from "../models/Listing";
+import { DI } from "../index";
+import { Listing } from "../entities/Listing";
 import HttpError from "../errors/HttpError";
+
 require("express-async-errors");
 
 export const getListings = async (req: Request, res: Response) => {
@@ -9,33 +12,34 @@ export const getListings = async (req: Request, res: Response) => {
   const page = req.query.page || 1;
   const limit = req.query.limit || 5;
 
-  const result = await Listing.paginate(
+  const [listings, count] = await DI.listingRepository.findAndCount(
     {},
-    { page: <number>page, limit: <number>limit }
+    { offset: (+page - 1) * +limit, limit: +limit }
   );
 
-  res.json(result);
+  res.json({ listings, count });
 };
 
 export const getListingDetails = async (req: Request, res: Response) => {
-  const { id } = req.query;
-  const listing = await Listing.findById(id);
+  const { id } = req.params;
+  const listing = await DI.listingRepository.findOne(id);
   res.json(listing);
 };
 
 export const createListing = async (req: Request, res: Response) => {
   const { title, description } = req.body;
 
-  const listing = new Listing({ title, description });
-  const result = await listing.save();
-  res.status(201).json(result);
+  const listing = new Listing();
+  wrap(listing).assign({ title, description });
+  await DI.listingRepository.persistAndFlush(listing);
+  res.status(201).json(listing);
 };
 
 export const replaceListing = async (req: Request, res: Response) => {
-  const { id } = req.query;
+  const { id } = req.params;
   const { title, description, level, subject } = req.body;
 
-  const listing = await Listing.findById(id);
+  const listing = await DI.listingRepository.findOne(id);
 
   if (!listing) {
     throw new HttpError(404, "Listing not found");
@@ -47,26 +51,25 @@ export const replaceListing = async (req: Request, res: Response) => {
   }
 
   // update fields
-  listing.title = title;
-  listing.description = description;
-  listing.level = level;
-  listing.subject = subject;
+  wrap(listing).assign({ title, description });
 
   // save
-  const result = await listing.save();
-  res.json(result);
+  await DI.listingRepository.flush();
+  res.json(listing);
 };
 
 // export const updateListing = async (req: Request, res: Response) => {};
 
 export const deleteListing = async (req: Request, res: Response) => {
-  const { id } = req.query;
+  const { id } = req.params;
 
-  const result = Listing.findByIdAndRemove(id);
+  const listing = DI.listingRepository.findOne(id);
 
-  if (!result) {
+  if (!listing) {
     throw new HttpError(404, "Listing not found");
   }
 
-  res.json(result);
+  await DI.listingRepository.removeAndFlush(listing);
+
+  res.json(listing);
 };
