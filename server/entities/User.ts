@@ -13,8 +13,11 @@ export class User extends BaseEntity {
   @Property()
   name: string;
 
-  @Property()
+  @Property({ unique: true })
   email: string;
+
+  @Property({ unique: true })
+  password: string;
 
   @OneToMany(() => Listing, (listing) => listing.tutor, {
     cascade: [Cascade.ALL],

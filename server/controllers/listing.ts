@@ -37,7 +37,7 @@ export const createListing = async (req: Request, res: Response) => {
 
 export const replaceListing = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { title, description, level, subject } = req.body;
+  const { title, description } = req.body;
 
   const listing = await DI.listingRepository.findOne(id);
 
