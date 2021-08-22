@@ -6,14 +6,22 @@ import {
   RequestContext,
 } from "@mikro-orm/core";
 import cors from "cors";
-import { PORT, MDB_KEY, __prod__ } from "./utils/config";
+import session from "express-session";
+import connectMongo from "connect-mongodb-session";
+const MongoDBStore = connectMongo(session);
 
+import { PORT, MDB_KEY, __prod__, SESSION_SECRET } from "./utils/config";
 import { User, Listing } from "./entities";
 import authRoutes from "./routes/auth";
 import listingRoutes from "./routes/listing";
 import userRoutes from "./routes/user";
 import HttpError from "./errors/HttpError";
 
+const app = express();
+const store = new MongoDBStore({
+  uri: MDB_KEY,
+  collection: "sessions",
+});
 export const DI = {} as {
   orm: MikroORM;
   em: EntityManager;
@@ -33,13 +41,27 @@ const main = async () => {
   DI.userRepository = DI.orm.em.getRepository(User);
   DI.listingRepository = DI.orm.em.getRepository(Listing);
 
-  const app = express();
   // serve frontend
   app.use(express.static("build/client"));
   // body parser for json
   app.use(express.json());
   // cors
   app.use(cors());
+
+  app.use(
+    session({
+      secret: SESSION_SECRET,
+      cookie: {
+        maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years
+        httpOnly: true,
+        secure: __prod__,
+        sameSite: "lax",
+      },
+      store: store,
+      resave: false,
+      saveUninitialized: false,
+    })
+  );
 
   app.use((_req, _res, next) => RequestContext.create(DI.orm.em, next));
 

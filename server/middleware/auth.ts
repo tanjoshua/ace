@@ -1,31 +1,18 @@
 import { Request, Response, NextFunction } from "express";
 
-import User from "../models/User";
+import { DI } from "../index";
 import HttpError from "../errors/HttpError";
-import { verifyToken } from "../utils/tokenService";
 
-// token will be in the Authorization header eg. Bearer <token>
 export default async (req: Request, _res: Response, next: NextFunction) => {
-  const authorization = req.get("Authorization");
-
-  // no token attached
-  if (!authorization || typeof authorization == "undefined") {
-    // ERROR
+  if (!req.session.userId) {
     throw new HttpError(401, "Unauthorized");
   }
 
-  // parse token
-  const encryptedToken = authorization.split(" ")[1];
-  const token = verifyToken(encryptedToken);
-
-  // retrieve user data
-  const user = await User.findById(token.userId);
+  const user = await DI.userRepository.findOne(req.session.userId);
 
   if (!user) {
-    throw new HttpError(401, "Unauthorized - User not found");
+    throw new HttpError(401, "Unauthorized");
   }
-
-  req.user = user;
 
   next();
 };

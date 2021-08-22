@@ -47,6 +47,7 @@ export const login = async (req: Request, res: Response) => {
   }
 
   // verified
+  req.session.userId = user.id;
   const token = createToken({ userId: user.id, name: user.name });
   res.json({ userId: user.id, token });
 };
