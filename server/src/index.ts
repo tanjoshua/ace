@@ -48,7 +48,7 @@ const main = async () => {
   // body parser for json
   app.use(express.json());
   // cors
-  app.use(cors());
+  app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 
   app.use(
     session({
@@ -93,8 +93,8 @@ const main = async () => {
   );
 
   // start server
-  app.listen(PORT || 3000, () => {
-    console.log(`Server running on port ${PORT || 3000}`);
+  app.listen(PORT || 8000, () => {
+    console.log(`Server running on port ${PORT || 8000}`);
   });
 };
 

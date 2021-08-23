@@ -25,6 +25,7 @@ export const register = async (req: Request, res: Response) => {
   wrap(user).assign({ name, email, password: hashedPassword });
   DI.userRepository.persistAndFlush(user);
 
+  req.session.userId = user.id;
   const token = createToken({ userId: user.id, name: user.name });
 
   // save into db
