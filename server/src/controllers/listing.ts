@@ -30,7 +30,7 @@ export const createListing = async (req: Request, res: Response) => {
   const { title, description } = req.body;
 
   const listing = new Listing();
-  wrap(listing).assign({ title, description });
+  wrap(listing).assign({ title, description, tutor: req.session.userId });
   await DI.listingRepository.persistAndFlush(listing);
   res.status(201).json(listing);
 };

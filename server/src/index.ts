@@ -4,6 +4,7 @@ import {
   EntityManager,
   EntityRepository,
   RequestContext,
+  ReflectMetadataProvider,
 } from "@mikro-orm/core";
 import cors from "cors";
 import session from "express-session";
@@ -36,6 +37,7 @@ const main = async () => {
     clientUrl: MDB_KEY,
     type: "mongo",
     debug: !__prod__,
+    metadataProvider: ReflectMetadataProvider,
   });
   DI.em = DI.orm.em;
   DI.userRepository = DI.orm.em.getRepository(User);
