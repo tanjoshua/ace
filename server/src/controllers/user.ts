@@ -14,5 +14,5 @@ export const getUserDetails = async (req: Request, res: Response) => {
     throw new HttpError(404, "User not found");
   }
 
-  res.json(user);
+  res.json({ user });
 };
