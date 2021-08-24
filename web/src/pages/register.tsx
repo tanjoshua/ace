@@ -2,6 +2,7 @@ import React from "react";
 import { Form, Formik } from "formik";
 import { Box, Button } from "@chakra-ui/react";
 
+import Navbar from "../components/shared/Navbar";
 import InputField from "../components/shared/InputField";
 import authService from "../../services/auth";
 import { toErrorMap } from "../../utils/toErrorMap";
@@ -14,6 +15,7 @@ const register = (props: Props) => {
 
   return (
     <>
+      <Navbar />
       <Formik
         initialValues={{ name: "", email: "", password: "" }}
         onSubmit={async (values, { setErrors }) => {

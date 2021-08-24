@@ -6,6 +6,7 @@ import { Box, Button } from "@chakra-ui/react";
 import authService from "../../services/auth";
 import { toErrorMap } from "../../utils/toErrorMap";
 import { useRouter } from "next/dist/client/router";
+import Navbar from "../components/shared/Navbar";
 
 interface Props {}
 
@@ -14,6 +15,7 @@ const login = (props: Props) => {
 
   return (
     <>
+      <Navbar />
       <Formik
         initialValues={{ email: "", password: "" }}
         onSubmit={async (values, { setErrors }) => {
