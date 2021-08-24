@@ -17,6 +17,7 @@ import authRoutes from "./routes/auth";
 import listingRoutes from "./routes/listing";
 import userRoutes from "./routes/user";
 import HttpError from "./errors/HttpError";
+import FieldError from "./errors/FieldError";
 
 const app = express();
 const store = new MongoDBStore({
@@ -86,9 +87,13 @@ const main = async () => {
   app.use(
     (err: HttpError, _req: Request, res: Response, _next: NextFunction) => {
       const status = err.status || 500;
-      const message = err.message;
+      const body: any = { message: err.message };
 
-      res.status(status).json({ message });
+      if (err instanceof FieldError) {
+        body.errors = err.errors;
+      }
+
+      res.status(status).json(body);
     }
   );
 
