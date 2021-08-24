@@ -12,6 +12,7 @@ router.post(
   [
     body("email")
       .isEmail()
+      .withMessage("Enter a valid email")
       .custom((value) => {
         return DI.userRepository.findOne({ email: value }).then((user) => {
           return user
@@ -20,13 +21,24 @@ router.post(
         });
       })
       .normalizeEmail(),
-    body("password").trim().isLength({ min: 6 }),
-    body("name").trim().notEmpty(),
+    body("password")
+      .trim()
+      .isLength({ min: 6 })
+      .withMessage("Password must be at least 6 characters"),
+    body("name").trim().notEmpty().withMessage("Name cannot be empty"),
   ],
   handleValidatorErrors,
   register
 );
 
-router.post("/login", login);
+router.post(
+  "/login",
+  [
+    body("email").isEmail().normalizeEmail().withMessage("Enter a valid email"),
+    body("password").trim().notEmpty().withMessage("Password cannot be empty"),
+  ],
+  handleValidatorErrors,
+  login
+);
 
 export default router;
