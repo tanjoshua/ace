@@ -11,12 +11,19 @@ import session from "express-session";
 import connectMongo from "connect-mongodb-session";
 const MongoDBStore = connectMongo(session);
 
-import { PORT, MDB_KEY, __prod__, SESSION_SECRET } from "./utils/config";
+import {
+  PORT,
+  MDB_KEY,
+  __prod__,
+  SESSION_SECRET,
+  COOKIE_NAME,
+} from "./utils/config";
 import { User, Listing } from "./entities";
 import authRoutes from "./routes/auth";
 import listingRoutes from "./routes/listing";
 import userRoutes from "./routes/user";
 import HttpError from "./errors/HttpError";
+import FieldError from "./errors/FieldError";
 
 const app = express();
 const store = new MongoDBStore({
@@ -48,10 +55,11 @@ const main = async () => {
   // body parser for json
   app.use(express.json());
   // cors
-  app.use(cors());
+  app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 
   app.use(
     session({
+      name: COOKIE_NAME,
       secret: SESSION_SECRET,
       cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years
@@ -86,15 +94,19 @@ const main = async () => {
   app.use(
     (err: HttpError, _req: Request, res: Response, _next: NextFunction) => {
       const status = err.status || 500;
-      const message = err.message;
+      const body: any = { message: err.message };
 
-      res.status(status).json({ message });
+      if (err instanceof FieldError) {
+        body.errors = err.errors;
+      }
+
+      res.status(status).json(body);
     }
   );
 
   // start server
-  app.listen(PORT || 3000, () => {
-    console.log(`Server running on port ${PORT || 3000}`);
+  app.listen(PORT || 8000, () => {
+    console.log(`Server running on port ${PORT || 8000}`);
   });
 };
 

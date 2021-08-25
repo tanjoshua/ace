@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "tsc": "tsc",
-    "dev": "tsc-watch --onSuccess \"node dist/server\"",
+    "dev": "tsc-watch --onSuccess \"node dist/index\"",
     "lint": "eslint --ext .ts .",
     "start": "tsc && node dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -36,6 +36,7 @@
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",
     "express-session": "^1.17.2",
+    "express-validator": "^6.12.1",
     "jsonwebtoken": "^8.5.1",
     "socket.io": "^4.0.2"
   }
