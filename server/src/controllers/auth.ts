@@ -1,12 +1,15 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { wrap } from "@mikro-orm/core";
+import { v4 } from "uuid";
 
 import { User } from "../entities/User";
 import { createToken } from "../utils/tokenService";
 import HttpError from "../errors/HttpError";
 import { DI } from "..";
 import { COOKIE_NAME } from "../utils/config";
+import { sendEmail } from "../utils/emailService";
+import { PasswordReset } from "../entities";
 
 require("express-async-errors");
 
@@ -62,4 +65,22 @@ export const logout = async (req: Request, res: Response) => {
     }
     res.json();
   });
+};
+
+export const forgotPassword = async (req: Request, res: Response) => {
+  const { email } = req.body;
+
+  // find user
+  const user = await DI.userRepository.findOne({ email });
+  if (!user) {
+    throw new HttpError(404, "User not found");
+  }
+
+  // generate token
+  const token = v4();
+  await DI.passwordResetRepository.create({ token, userId: user.id });
+
+  // send email
+  const html = `<a href="http://localhost:3000/reset-password/${token}">Reset Password</a>`;
+  await sendEmail(email, "Reset Password", html);
 };

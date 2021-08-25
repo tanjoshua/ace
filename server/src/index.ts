@@ -18,7 +18,7 @@ import {
   SESSION_SECRET,
   COOKIE_NAME,
 } from "./utils/config";
-import { User, Listing } from "./entities";
+import { User, Listing, PasswordReset } from "./entities";
 import authRoutes from "./routes/auth";
 import listingRoutes from "./routes/listing";
 import userRoutes from "./routes/user";
@@ -35,6 +35,7 @@ export const DI = {} as {
   em: EntityManager;
   userRepository: EntityRepository<User>;
   listingRepository: EntityRepository<Listing>;
+  passwordResetRepository: EntityRepository<PasswordReset>;
 };
 
 const main = async () => {
