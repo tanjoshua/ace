@@ -12,9 +12,9 @@ import {
 
 import Navbar from "../components/shared/Navbar";
 import InputField from "../components/shared/InputField";
-import authService from "../../services/auth";
+import authService from "../../services/authService";
 import { toErrorMap } from "../../utils/toErrorMap";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 
 interface Props {}
 

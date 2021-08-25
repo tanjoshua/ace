@@ -2,7 +2,7 @@ import { Router } from "express";
 import { body } from "express-validator";
 
 import { DI } from "../index";
-import { login, register } from "../controllers/auth";
+import { login, register, logout } from "../controllers/auth";
 import handleValidatorErrors from "../middleware/handleValidatorErrors";
 
 const router = Router();
@@ -40,5 +40,7 @@ router.post(
   handleValidatorErrors,
   login
 );
+
+router.post("/logout", logout);
 
 export default router;

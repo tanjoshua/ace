@@ -6,6 +6,7 @@ import { User } from "../entities/User";
 import { createToken } from "../utils/tokenService";
 import HttpError from "../errors/HttpError";
 import { DI } from "..";
+import { COOKIE_NAME } from "../utils/config";
 
 require("express-async-errors");
 
@@ -51,4 +52,14 @@ export const login = async (req: Request, res: Response) => {
   req.session.userId = user.id;
   const token = createToken({ userId: user.id, name: user.name });
   res.json({ userId: user.id, token });
+};
+
+export const logout = async (req: Request, res: Response) => {
+  req.session.destroy((err) => {
+    res.clearCookie(COOKIE_NAME);
+    if (err) {
+      console.log("LOGOUT ERROR: ", err);
+    }
+    res.json();
+  });
 };

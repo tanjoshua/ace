@@ -14,9 +14,9 @@ import {
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 
-import authService from "../../services/auth";
+import authService from "../../services/authService";
 import { toErrorMap } from "../../utils/toErrorMap";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 import Navbar from "../components/shared/Navbar";
 
 interface Props {}

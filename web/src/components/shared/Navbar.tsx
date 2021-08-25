@@ -19,7 +19,9 @@ import {
 import NextLink from "next/link";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import useFetch from "../../../utils/useFetch";
-import userService from "../../../services/user";
+import userService from "../../../services/userService";
+import authService from "../../../services/authService";
+import { useRouter } from "next/router";
 
 const Links = ["Dashboard", "Projects", "Team"];
 
@@ -40,7 +42,10 @@ const NavLink = ({ children }: { children: ReactNode }) => (
 
 export default function Simple() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [isLoading, response, error] = useFetch(() => userService.getUser());
+  const router = useRouter();
+  const [isLoading, response, error] = useFetch(() =>
+    userService.getCurrentUser()
+  );
   const isLoggedIn = !!response?.data;
 
   return (
@@ -117,7 +122,14 @@ export default function Simple() {
                 <MenuItem>Link 1</MenuItem>
                 <MenuItem>Link 2</MenuItem>
                 <MenuDivider />
-                <MenuItem>Link 3</MenuItem>
+                <MenuItem
+                  onClick={async () => {
+                    await authService.logout();
+                    router.reload();
+                  }}
+                >
+                  Logout
+                </MenuItem>
               </MenuList>
             </Menu>
           </Flex>

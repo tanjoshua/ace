@@ -11,7 +11,13 @@ import session from "express-session";
 import connectMongo from "connect-mongodb-session";
 const MongoDBStore = connectMongo(session);
 
-import { PORT, MDB_KEY, __prod__, SESSION_SECRET } from "./utils/config";
+import {
+  PORT,
+  MDB_KEY,
+  __prod__,
+  SESSION_SECRET,
+  COOKIE_NAME,
+} from "./utils/config";
 import { User, Listing } from "./entities";
 import authRoutes from "./routes/auth";
 import listingRoutes from "./routes/listing";
@@ -53,6 +59,7 @@ const main = async () => {
 
   app.use(
     session({
+      name: COOKIE_NAME,
       secret: SESSION_SECRET,
       cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years

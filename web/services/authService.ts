@@ -8,4 +8,8 @@ const login = ({ email, password }) => {
   return axiosBase.post("/auth/login", { email, password });
 };
 
-export default { register, login };
+const logout = () => {
+  return axiosBase.post("/auth/logout");
+};
+
+export default { register, login, logout };
