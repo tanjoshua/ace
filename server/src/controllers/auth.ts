@@ -9,7 +9,6 @@ import HttpError from "../errors/HttpError";
 import { DI } from "..";
 import { COOKIE_NAME } from "../utils/config";
 import { sendEmail } from "../utils/emailService";
-import { PasswordReset } from "../entities";
 
 require("express-async-errors");
 
@@ -83,4 +82,31 @@ export const forgotPassword = async (req: Request, res: Response) => {
   // send email
   const html = `<a href="http://localhost:3000/reset-password/${token}">Reset Password</a>`;
   await sendEmail(email, "Reset Password", html);
+  res.json();
+};
+
+export const resetPassword = async (req: Request, res: Response) => {
+  const { token, password } = req.body;
+
+  // retrieve user
+  const pr = await DI.passwordResetRepository.findOne(token);
+  if (!pr) {
+    throw new HttpError(404, "Password reset has expired");
+  }
+
+  const userId = pr.userId;
+  const user = await DI.userRepository.findOne(userId);
+  if (!user) {
+    throw new HttpError(404, "User not found");
+  }
+
+  // store new password
+  const hashedPassword = await bcrypt.hash(password, 12);
+  user.password = hashedPassword;
+  await DI.userRepository.flush();
+
+  // delete password reset token
+  await DI.passwordResetRepository.removeAndFlush(pr);
+
+  res.json({ message: "success" });
 };

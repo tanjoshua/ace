@@ -1,7 +1,9 @@
-import { Entity, ManyToOne, Property } from "@mikro-orm/core";
+import { Entity, PrimaryKey, Property } from "@mikro-orm/core";
 
+// In the future, replace this db entry with a better storage implementation like redis
 @Entity()
 export class PasswordReset {
+  @PrimaryKey()
   @Property()
   token: string;
 

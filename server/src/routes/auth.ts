@@ -2,7 +2,13 @@ import { Router } from "express";
 import { body } from "express-validator";
 
 import { DI } from "../index";
-import { login, register, logout, forgotPassword } from "../controllers/auth";
+import {
+  login,
+  register,
+  logout,
+  forgotPassword,
+  resetPassword,
+} from "../controllers/auth";
 import handleValidatorErrors from "../middleware/handleValidatorErrors";
 
 const router = Router();
@@ -43,6 +49,22 @@ router.post(
 
 router.post("/logout", logout);
 
-router.post("/forgotPassword", forgotPassword);
+router.post(
+  "/forgotPassword",
+  [body("email").isEmail().normalizeEmail().withMessage("Enter a valid email")],
+  forgotPassword
+);
+
+router.post(
+  "/resetPassword",
+  [
+    body("token").notEmpty(),
+    body("password")
+      .trim()
+      .isLength({ min: 6 })
+      .withMessage("Password must be at least 6 characters"),
+  ],
+  resetPassword
+);
 
 export default router;
