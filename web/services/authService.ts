@@ -12,4 +12,12 @@ const logout = () => {
   return axiosBase.post("/auth/logout");
 };
 
-export default { register, login, logout };
+const forgotPassword = ({ email }) => {
+  return axiosBase.post("/auth/forgotPassword", { email });
+};
+
+const resetPassword = ({ token, password }) => {
+  return axiosBase.post("/auth/resetPassword", { token, password });
+};
+
+export default { register, login, logout, forgotPassword, resetPassword };

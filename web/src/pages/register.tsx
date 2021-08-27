@@ -60,25 +60,19 @@ const register = (props: Props) => {
               {({ isSubmitting }) => (
                 <Form>
                   <Stack spacing={4}>
-                    <Box>
-                      <InputField name="name" placeholder="Name" label="Name" />
-                    </Box>
-                    <Box>
-                      <InputField
-                        name="email"
-                        placeholder="Email"
-                        label="Email"
-                        type="email"
-                      />
-                    </Box>
-                    <Box>
-                      <InputField
-                        name="password"
-                        placeholder="Password"
-                        label="Password"
-                        type="password"
-                      />
-                    </Box>
+                    <InputField name="name" placeholder="Name" label="Name" />
+                    <InputField
+                      name="email"
+                      placeholder="Email"
+                      label="Email"
+                      type="email"
+                    />
+                    <InputField
+                      name="password"
+                      placeholder="Password"
+                      label="Password"
+                      type="password"
+                    />
                     <Button type="submit" isLoading={isSubmitting}>
                       Register
                     </Button>
