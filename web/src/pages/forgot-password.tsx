@@ -34,9 +34,9 @@ const forgotPassword = (props: Props) => {
               await authService.forgotPassword(values);
               setIsDone(true);
             } catch (error) {
-              const errors = error.response?.data?.errors;
-              if (errors) {
-                setErrors(toErrorMap(errors));
+              const message = error.response?.data?.message;
+              if (message) {
+                setErrors({ email: message });
               }
             }
           }}

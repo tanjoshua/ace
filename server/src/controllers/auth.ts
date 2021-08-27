@@ -77,7 +77,11 @@ export const forgotPassword = async (req: Request, res: Response) => {
 
   // generate token
   const token = v4();
-  await DI.passwordResetRepository.create({ token, userId: user.id });
+  const pr = await DI.passwordResetRepository.create({
+    token,
+    userId: user.id,
+  });
+  await DI.passwordResetRepository.persistAndFlush(pr);
 
   // send email
   const html = `<a href="http://localhost:3000/reset-password/${token}">Reset Password</a>`;
