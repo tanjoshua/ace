@@ -18,7 +18,6 @@ export const getUserDetails = async (req: Request, res: Response) => {
 };
 
 export const getCurrentUser = async (req: Request, res: Response) => {
-  console.log("GET CURRENT USER");
   const id = req.session.userId;
 
   // get user details

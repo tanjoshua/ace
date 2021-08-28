@@ -18,7 +18,7 @@ import {
   SESSION_SECRET,
   COOKIE_NAME,
 } from "./utils/config";
-import { User, Listing } from "./entities";
+import { User, Listing, PasswordReset } from "./entities";
 import authRoutes from "./routes/auth";
 import listingRoutes from "./routes/listing";
 import userRoutes from "./routes/user";
@@ -35,12 +35,13 @@ export const DI = {} as {
   em: EntityManager;
   userRepository: EntityRepository<User>;
   listingRepository: EntityRepository<Listing>;
+  passwordResetRepository: EntityRepository<PasswordReset>;
 };
 
 const main = async () => {
   // setup ORM
   DI.orm = await MikroORM.init({
-    entities: [User, Listing],
+    entities: [User, Listing, PasswordReset],
     clientUrl: MDB_KEY,
     type: "mongo",
     debug: !__prod__,
@@ -49,6 +50,7 @@ const main = async () => {
   DI.em = DI.orm.em;
   DI.userRepository = DI.orm.em.getRepository(User);
   DI.listingRepository = DI.orm.em.getRepository(Listing);
+  DI.passwordResetRepository = DI.orm.em.getRepository(PasswordReset);
 
   // serve frontend
   app.use(express.static("build/client"));

@@ -70,22 +70,18 @@ const login = (props: Props) => {
               {({ isSubmitting }) => (
                 <Form>
                   <Stack spacing={4}>
-                    <Box>
-                      <InputField
-                        name="email"
-                        placeholder="Email"
-                        label="Email"
-                        type="email"
-                      />
-                    </Box>
-                    <Box>
-                      <InputField
-                        name="password"
-                        placeholder="Password"
-                        label="Password"
-                        type="password"
-                      />
-                    </Box>
+                    <InputField
+                      name="email"
+                      placeholder="Email"
+                      label="Email"
+                      type="email"
+                    />
+                    <InputField
+                      name="password"
+                      placeholder="Password"
+                      label="Password"
+                      type="password"
+                    />
                     <Stack spacing={10}>
                       <Stack
                         direction={{ base: "column", sm: "row" }}
@@ -93,7 +89,9 @@ const login = (props: Props) => {
                         justify={"space-between"}
                       >
                         <Checkbox>Remember me</Checkbox>
-                        <Link color={"blue.400"}>Forgot password?</Link>
+                        <NextLink href="/forgot-password">
+                          <Link color={"blue.400"}>Forgot password?</Link>
+                        </NextLink>
                       </Stack>
                       <Button type="submit" isLoading={isSubmitting}>
                         Login

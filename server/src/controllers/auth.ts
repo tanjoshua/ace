@@ -1,12 +1,14 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { wrap } from "@mikro-orm/core";
+import { v4 } from "uuid";
 
 import { User } from "../entities/User";
 import { createToken } from "../utils/tokenService";
 import HttpError from "../errors/HttpError";
 import { DI } from "..";
 import { COOKIE_NAME } from "../utils/config";
+import { sendEmail } from "../utils/emailService";
 
 require("express-async-errors");
 
@@ -62,4 +64,53 @@ export const logout = async (req: Request, res: Response) => {
     }
     res.json();
   });
+};
+
+export const forgotPassword = async (req: Request, res: Response) => {
+  const { email } = req.body;
+
+  // find user
+  const user = await DI.userRepository.findOne({ email });
+  if (!user) {
+    throw new HttpError(404, "User not found");
+  }
+
+  // generate token
+  const token = v4();
+  const pr = await DI.passwordResetRepository.create({
+    token,
+    userId: user.id,
+  });
+  await DI.passwordResetRepository.persistAndFlush(pr);
+
+  // send email
+  const html = `<a href="http://localhost:3000/reset-password/${token}">Reset Password</a>`;
+  await sendEmail(email, "Reset Password", html);
+  res.json();
+};
+
+export const resetPassword = async (req: Request, res: Response) => {
+  const { token, password } = req.body;
+
+  // retrieve user
+  const pr = await DI.passwordResetRepository.findOne(token);
+  if (!pr) {
+    throw new HttpError(404, "Password reset has expired");
+  }
+
+  const userId = pr.userId;
+  const user = await DI.userRepository.findOne(userId);
+  if (!user) {
+    throw new HttpError(404, "User not found");
+  }
+
+  // store new password
+  const hashedPassword = await bcrypt.hash(password, 12);
+  user.password = hashedPassword;
+  await DI.userRepository.flush();
+
+  // delete password reset token
+  await DI.passwordResetRepository.removeAndFlush(pr);
+
+  res.json({ message: "success" });
 };
