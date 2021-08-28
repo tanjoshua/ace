@@ -9,10 +9,11 @@ export default async (req: Request, _res: Response, next: NextFunction) => {
   }
 
   const user = await DI.userRepository.findOne(req.session.userId);
-
   if (!user) {
     throw new HttpError(401, "Unauthorized");
   }
+
+  req.user = user;
 
   next();
 };
