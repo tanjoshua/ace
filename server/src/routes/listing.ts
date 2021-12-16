@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { body } from "express-validator";
 import {
   getListings,
   createListing,
@@ -6,15 +7,27 @@ import {
   replaceListing,
   deleteListing,
 } from "../controllers/listing";
+import { Level } from "../entities";
 import auth from "../middleware/auth";
 
 const router = Router();
 
-router.get("/", auth, getListings);
+router.get("/", getListings);
 
-router.get("/:id", auth, getListingDetails);
+router.get("/:id", getListingDetails);
 
-router.post("/", auth, createListing);
+router.post(
+  "/",
+  auth,
+  [
+    body("title").notEmpty().withMessage("Title is a required field"),
+    body("level").isArray(),
+    body("level.*").isIn(Object.values(Level)),
+    body("subject").isArray(),
+    body("contactInfo").isArray(),
+  ],
+  createListing
+);
 
 router.put("/:id", auth, replaceListing);
 

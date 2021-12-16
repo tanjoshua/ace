@@ -27,17 +27,16 @@ export const getListingDetails = async (req: Request, res: Response) => {
 };
 
 export const createListing = async (req: Request, res: Response) => {
-  const { title, description } = req.body;
-
+  // create listing
   const listing = new Listing();
-  wrap(listing).assign({ title, description, tutor: req.session.userId });
+  listing.tutor = req.user!;
+  wrap(listing).assign(req.body);
   await DI.listingRepository.persistAndFlush(listing);
   res.status(201).json(listing);
 };
 
 export const replaceListing = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { title, description } = req.body;
 
   const listing = await DI.listingRepository.findOne(id);
 
@@ -46,12 +45,12 @@ export const replaceListing = async (req: Request, res: Response) => {
   }
 
   // check that user is owner
-  if (listing.tutor.toString() !== id) {
+  if (listing.tutor.id !== req.session.userId) {
     throw new HttpError(403, "Forbidden - User not owner");
   }
 
   // update fields
-  wrap(listing).assign({ title, description });
+  wrap(listing).assign(req.body);
 
   // save
   await DI.listingRepository.flush();
@@ -63,10 +62,15 @@ export const replaceListing = async (req: Request, res: Response) => {
 export const deleteListing = async (req: Request, res: Response) => {
   const { id } = req.params;
 
-  const listing = DI.listingRepository.findOne(id);
+  const listing = await DI.listingRepository.findOne(id);
 
   if (!listing) {
     throw new HttpError(404, "Listing not found");
+  }
+
+  // check that user is owner
+  if (listing.tutor.id !== req.session.userId) {
+    throw new HttpError(403, "Forbidden - User not owner");
   }
 
   await DI.listingRepository.removeAndFlush(listing);
