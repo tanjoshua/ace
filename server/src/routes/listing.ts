@@ -6,6 +6,7 @@ import {
   getListingDetails,
   replaceListing,
   deleteListing,
+  getListingLevels,
 } from "../controllers/listing";
 import { Level } from "../entities";
 import auth from "../middleware/auth";
@@ -13,6 +14,8 @@ import auth from "../middleware/auth";
 const router = Router();
 
 router.get("/", getListings);
+
+router.get("/levels", getListingLevels);
 
 router.get("/:id", getListingDetails);
 
