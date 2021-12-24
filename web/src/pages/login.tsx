@@ -51,7 +51,11 @@ const login = (props: Props) => {
               onSubmit={async (values, { setErrors }) => {
                 try {
                   await authService.login(values);
-                  router.push("/");
+                  if (typeof router.query.next === "string") {
+                    router.push(router.query.next || "/");
+                  } else {
+                    router.push("/");
+                  }
                 } catch (error) {
                   if (error.response?.status === 401) {
                     setErrors({

@@ -1,6 +1,6 @@
 import { Button, Stack } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
-import Router from "next/router";
+import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import listingService from "../../services/listingService";
 import userService from "../../services/userService";
@@ -15,13 +15,14 @@ import Navbar from "../components/shared/Navbar";
 interface Props {}
 
 const createListing = (props: Props) => {
+  const router = useRouter();
   const [isLoading, response, error] = useFetch(() =>
     userService.getCurrentUser()
   );
   const isLoggedIn = !!response?.data;
   useEffect(() => {
     if (!isLoading && !isLoggedIn) {
-      Router.replace("/login");
+      router.replace(`/login?next=${router.pathname}`);
     }
   }, [isLoading, isLoggedIn]);
 
@@ -58,11 +59,11 @@ const createListing = (props: Props) => {
               console.log(values);
               const response = await listingService.createListing(values);
               const id = response.data.id;
-              Router.push(`/listing/${id}`);
+              router.push(`/listing/${id}`);
             } catch (error) {
               if (error.response?.status === 401) {
                 // redirect
-                Router.replace("/login");
+                router.replace(`/login?next=${router.pathname}`);
               } else {
                 const errors = error.response?.data?.errors;
                 if (errors) {
