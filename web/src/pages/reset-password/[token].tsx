@@ -14,7 +14,7 @@ import { toErrorMap } from "../../../utils/toErrorMap";
 import InputField from "../../components/shared/InputField";
 import Navbar from "../../components/shared/Navbar";
 
-const ResetPassword: NextPage<{ token: string }> = ({ token }) => {
+const ResetPassword: NextPage = () => {
   const router = useRouter();
   return (
     <>
@@ -29,7 +29,10 @@ const ResetPassword: NextPage<{ token: string }> = ({ token }) => {
           initialValues={{ password: "" }}
           onSubmit={async (values, { setErrors }) => {
             try {
-              await authService.resetPassword({ ...values, token });
+              await authService.resetPassword({
+                ...values,
+                token: router.query.token,
+              });
               router.push("/");
             } catch (error) {
               if (error.response?.status === 404) {
@@ -78,10 +81,6 @@ const ResetPassword: NextPage<{ token: string }> = ({ token }) => {
       </Flex>
     </>
   );
-};
-
-ResetPassword.getInitialProps = ({ query }) => {
-  return { token: query.token as string };
 };
 
 export default ResetPassword;
