@@ -1,5 +1,5 @@
 import { FormControl, FormLabel } from "@chakra-ui/react";
-import { Select } from "chakra-react-select";
+import { CreatableSelect } from "chakra-react-select";
 import { useField } from "formik";
 import React from "react";
 
@@ -9,14 +9,14 @@ interface Props {
   options: string[];
 }
 
-const Multiselect = ({ label, options, ...props }: Props) => {
+const CreateSelect = ({ label, options, ...props }: Props) => {
   const [field, { error }, helpers] = useField(props);
   const { setValue } = helpers;
 
   return (
     <FormControl>
       <FormLabel>{label}</FormLabel>
-      <Select
+      <CreatableSelect
         isMulti
         options={options}
         {...props}
@@ -26,4 +26,4 @@ const Multiselect = ({ label, options, ...props }: Props) => {
   );
 };
 
-export default Multiselect;
+export default CreateSelect;
