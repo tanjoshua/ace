@@ -1,7 +1,7 @@
 import { Button, Stack } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
-import { useRouter } from "next/router";
-import React from "react";
+import Router from "next/router";
+import React, { useEffect } from "react";
 import listingService from "../../services/listingService";
 import userService from "../../services/userService";
 import { toErrorMap } from "../../utils/toErrorMap";
@@ -15,6 +15,16 @@ import Navbar from "../components/shared/Navbar";
 interface Props {}
 
 const createListing = (props: Props) => {
+  const [isLoading, response, error] = useFetch(() =>
+    userService.getCurrentUser()
+  );
+  const isLoggedIn = !!response?.data;
+  useEffect(() => {
+    if (!isLoading && !isLoggedIn) {
+      Router.replace("/login");
+    }
+  }, [isLoading, isLoggedIn]);
+
   const [levelsIsLoading, levelsResponse, levelsError] = useFetch(() =>
     listingService.getLevels()
   );
@@ -29,8 +39,6 @@ const createListing = (props: Props) => {
     value: x,
     label: x,
   }));
-
-  const router = useRouter();
 
   return (
     <>
@@ -50,11 +58,11 @@ const createListing = (props: Props) => {
               console.log(values);
               const response = await listingService.createListing(values);
               const id = response.data.id;
-              router.push(`/listing/${id}`);
+              Router.push(`/listing/${id}`);
             } catch (error) {
               if (error.response?.status === 401) {
                 // redirect
-                router.push("/login");
+                Router.replace("/login");
               } else {
                 const errors = error.response?.data?.errors;
                 if (errors) {
