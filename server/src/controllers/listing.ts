@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { wrap } from "@mikro-orm/core";
 
 import { DI } from "../index";
-import { Listing, Level } from "../entities/Listing";
+import { Listing, Level, subjects } from "../entities/Listing";
 import HttpError from "../errors/HttpError";
 
 require("express-async-errors");
@@ -81,5 +81,11 @@ export const deleteListing = async (req: Request, res: Response) => {
 export const getListingLevels = async (_req: Request, res: Response) => {
   res.json({
     levels: Object.values(Level),
+  });
+};
+
+export const getListingSubjects = async (_req: Request, res: Response) => {
+  res.json({
+    subjects,
   });
 };
