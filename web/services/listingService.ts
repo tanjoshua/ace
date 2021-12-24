@@ -1,28 +1,40 @@
 import axiosBase from "./base";
 
-const getListings = () => {
+export const getListings = () => {
   const params = {};
   return axiosBase.get("/listing", { params });
 };
 
-const createListing = (data) => {
+export const createListing = (data) => {
   return axiosBase.post("/listing", data);
 };
 
-const updateListing = (data) => {
+export const updateListing = (data) => {
   return axiosBase.put("/listing", data);
 };
 
-const getListingById = (id) => {
+export const getListingById = (id) => {
   return axiosBase.get(`/listing/${id}`);
 };
 
-const deleteListingById = (id) => {
+export const deleteListingById = (id) => {
   return axiosBase.delete(`/listing/${id}`);
 };
 
-const getLevels = () => {
+export const getLevels = () => {
   return axiosBase.get(`/listing/levels`);
 };
 
-export default {};
+export const getSubjects = () => {
+  return axiosBase.get(`/listing/subjects`);
+};
+
+export default {
+  getListings,
+  createListing,
+  updateListing,
+  getListingById,
+  deleteListingById,
+  getLevels,
+  getSubjects,
+};
