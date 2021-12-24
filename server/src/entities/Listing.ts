@@ -23,7 +23,7 @@ export class Listing extends BaseEntity {
   description: string;
 
   @Property()
-  contactInfo: [string, string][];
+  contactInfo: string;
 }
 
 export enum Level {
@@ -34,4 +34,15 @@ export enum Level {
   OTHER = "Other",
 }
 
-export enum Subject {}
+export const subjects = [
+  "Mathematics",
+  "English",
+  "Chinese",
+  "Science",
+  "Physics",
+  "Chemistry",
+  "Biology",
+  "History",
+  "Geography",
+  "Economics",
+];

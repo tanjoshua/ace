@@ -17,9 +17,9 @@ type Props = InputHTMLAttributes<HTMLInputElement> & {
 const InputField = ({ label, textarea, size: _, ...props }: Props) => {
   const [field, { error }, helpers] = useField(props);
 
-  let InputDisplay: any = Input
+  let InputDisplay: any = Input;
   if (textarea) {
-    InputDisplay = Textarea
+    InputDisplay = Textarea;
   }
 
   return (

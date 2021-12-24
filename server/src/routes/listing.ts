@@ -6,13 +6,20 @@ import {
   getListingDetails,
   replaceListing,
   deleteListing,
+  getListingLevels,
+  getListingSubjects,
 } from "../controllers/listing";
 import { Level } from "../entities";
 import auth from "../middleware/auth";
+import handleValidatorErrors from "../middleware/handleValidatorErrors";
 
 const router = Router();
 
 router.get("/", getListings);
+
+router.get("/levels", getListingLevels);
+
+router.get("/subjects", getListingSubjects);
 
 router.get("/:id", getListingDetails);
 
@@ -24,8 +31,12 @@ router.post(
     body("level").isArray(),
     body("level.*").isIn(Object.values(Level)),
     body("subject").isArray(),
-    body("contactInfo").isArray(),
+    body("contactInfo")
+      .notEmpty()
+      .withMessage("Contact information is required"),
+    body("pricing").notEmpty().withMessage("Pricing information is required"),
   ],
+  handleValidatorErrors,
   createListing
 );
 
