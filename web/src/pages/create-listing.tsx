@@ -3,7 +3,7 @@ import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import listingService from "../../services/listingService";
-import userService from "../../services/userService";
+import redirectIfNotAuth from "../../utils/redirectIfNotAuth";
 import { toErrorMap } from "../../utils/toErrorMap";
 import useFetch from "../../utils/useFetch";
 import CreateSelect from "../components/shared/CreateSelect";
@@ -16,15 +16,7 @@ interface Props {}
 
 const createListing = (props: Props) => {
   const router = useRouter();
-  const [isLoading, response, error] = useFetch(() =>
-    userService.getCurrentUser()
-  );
-  const isLoggedIn = !!response?.data;
-  useEffect(() => {
-    if (!isLoading && !isLoggedIn) {
-      router.replace(`/login?next=${router.pathname}`);
-    }
-  }, [isLoading, isLoggedIn]);
+  redirectIfNotAuth();
 
   const [levelsIsLoading, levelsResponse, levelsError] = useFetch(() =>
     listingService.getLevels()

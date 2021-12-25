@@ -1,6 +1,7 @@
 import { AxiosResponse } from "axios";
 import React, { useState, useEffect } from "react";
 
+// hook to fetch data from server
 const useFetch = (service: () => Promise<AxiosResponse<any>>) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
