@@ -27,6 +27,7 @@ export const getListings = async (req: Request, res: Response) => {
     ...wrap(listing).toObject(),
     tutor: {
       name: listing.tutor.name,
+      id: listing.tutor.id,
     },
   }));
 

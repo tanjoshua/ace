@@ -2,6 +2,7 @@ import {
   Box,
   Flex,
   Heading,
+  Link,
   NumberDecrementStepper,
   NumberIncrementStepper,
   NumberInput,
@@ -10,6 +11,8 @@ import {
   Stack,
   Tag,
   Text,
+  LinkBox,
+  LinkOverlay,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import listingService from "../../services/listingService";
@@ -51,8 +54,10 @@ const ListingDisplay = ({}: Props) => {
   return (
     <Stack padding={2}>
       {listings.map((listing) => (
-        <Box p={5} shadow="md" borderWidth="1px" key={listing.id}>
-          <Heading fontSize="xl">{listing.title}</Heading>
+        <LinkBox p={5} shadow="md" borderWidth="1px" key={listing.id}>
+          <LinkOverlay href={`/listing/${listing.id}`}>
+            <Heading fontSize="xl">{listing.title}</Heading>
+          </LinkOverlay>
           <Flex mt={2}>
             {listing.subject.map((subject) => (
               <Tag key={subject} mr={2}>
@@ -67,11 +72,14 @@ const ListingDisplay = ({}: Props) => {
               </Tag>
             ))}
           </Flex>
-          <Text fontSize="sm" color="gray.600" mt={2}>
-            Listed by: {listing.tutor.name}
-          </Text>
+          <Link href={`/user/${listing.tutor.id}`}>
+            <Text fontSize="sm" color="gray.600" mt={2}>
+              Listed by: {listing.tutor.name}
+            </Text>
+          </Link>
+
           <Text mt={2}>{listing.description}</Text>
-        </Box>
+        </LinkBox>
       ))}
       <Flex align={"center"}>
         <Text>Page </Text>
