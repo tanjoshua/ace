@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { wrap } from "@mikro-orm/core";
+import { QueryOrder, wrap } from "@mikro-orm/core";
 
 import { DI } from "../index";
 import { Listing, Level, subjects } from "../entities/Listing";
@@ -14,7 +14,11 @@ export const getListings = async (req: Request, res: Response) => {
 
   const [listings, count] = await DI.listingRepository.findAndCount(
     {},
-    { offset: (+page - 1) * +limit, limit: +limit }
+    {
+      offset: (+page - 1) * +limit,
+      limit: +limit,
+      orderBy: { createdAt: QueryOrder.DESC },
+    }
   );
 
   res.json({ listings, count });
