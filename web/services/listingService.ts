@@ -1,7 +1,6 @@
 import axiosBase from "./base";
 
-export const getListings = () => {
-  const params = {};
+export const getListings = (params?) => {
   return axiosBase.get("/listing", { params });
 };
 

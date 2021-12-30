@@ -1,9 +1,9 @@
 import { Button, Stack } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect } from "react";
 import listingService from "../../services/listingService";
-import userService from "../../services/userService";
+import redirectIfNotAuth from "../../utils/redirectIfNotAuth";
 import { toErrorMap } from "../../utils/toErrorMap";
 import useFetch from "../../utils/useFetch";
 import CreateSelect from "../components/shared/CreateSelect";
@@ -15,6 +15,9 @@ import Navbar from "../components/shared/Navbar";
 interface Props {}
 
 const createListing = (props: Props) => {
+  const router = useRouter();
+  redirectIfNotAuth();
+
   const [levelsIsLoading, levelsResponse, levelsError] = useFetch(() =>
     listingService.getLevels()
   );
@@ -29,8 +32,6 @@ const createListing = (props: Props) => {
     value: x,
     label: x,
   }));
-
-  const router = useRouter();
 
   return (
     <>
@@ -54,7 +55,7 @@ const createListing = (props: Props) => {
             } catch (error) {
               if (error.response?.status === 401) {
                 // redirect
-                router.push("/login");
+                router.replace(`/login?next=${router.pathname}`);
               } else {
                 const errors = error.response?.data?.errors;
                 if (errors) {
