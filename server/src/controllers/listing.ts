@@ -18,10 +18,19 @@ export const getListings = async (req: Request, res: Response) => {
       offset: (+page - 1) * +limit,
       limit: +limit,
       orderBy: { createdAt: QueryOrder.DESC },
+      populate: ["tutor"],
     }
   );
 
-  res.json({ listings, count });
+  // keep only relevant info for tutor
+  const listingsResult = listings.map((listing) => ({
+    ...wrap(listing).toObject(),
+    tutor: {
+      name: listing.tutor.name,
+    },
+  }));
+
+  res.json({ listings: listingsResult, count });
 };
 
 export const getListingDetails = async (req: Request, res: Response) => {

@@ -27,7 +27,15 @@ const ListingDisplay = ({}: Props) => {
   useEffect(() => {
     const fetchListings = async () => {
       setIsLoading(true);
-      const response = await listingService.getListings({ page });
+      let response;
+
+      try {
+        response = await listingService.getListings({ page });
+      } catch (e) {
+        setIsLoading(false);
+        return;
+      }
+
       setListings(response.data.listings);
       setTotalPages(Math.ceil(response.data.count / limit));
       setIsLoading(false);
@@ -59,6 +67,9 @@ const ListingDisplay = ({}: Props) => {
               </Tag>
             ))}
           </Flex>
+          <Text fontSize="sm" color="gray.600" mt={2}>
+            Listed by: {listing.tutor.name}
+          </Text>
           <Text mt={2}>{listing.description}</Text>
         </Box>
       ))}
@@ -81,7 +92,7 @@ const ListingDisplay = ({}: Props) => {
             <NumberDecrementStepper />
           </NumberInputStepper>
         </NumberInput>
-        <Text>{`of ${totalPages}`}</Text>
+        <Text>of {totalPages}</Text>
       </Flex>
     </Stack>
   );
