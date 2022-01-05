@@ -47,6 +47,7 @@ export default function Simple() {
     userService.getCurrentUser()
   );
   const isLoggedIn = !!response?.data;
+  const user = response?.data.user;
 
   return (
     <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
@@ -119,8 +120,12 @@ export default function Simple() {
                 />
               </MenuButton>
               <MenuList>
-                <MenuItem>Link 1</MenuItem>
-                <MenuItem>Link 2</MenuItem>
+                <MenuItem as="a" href={`/user/${user.id}`}>
+                  Profile
+                </MenuItem>
+                <MenuItem as="a" href="/create-listing">
+                  Create Listing
+                </MenuItem>
                 <MenuDivider />
                 <MenuItem
                   onClick={async () => {
