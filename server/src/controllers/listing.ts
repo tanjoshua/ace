@@ -56,6 +56,7 @@ export const createListing = async (req: Request, res: Response) => {
   listing.tutor = req.user!;
   wrap(listing).assign(req.body);
   await DI.listingRepository.persistAndFlush(listing);
+
   res.status(201).json(listing);
 };
 

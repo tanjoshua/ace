@@ -8,7 +8,7 @@ export const getUserDetails = async (req: Request, res: Response) => {
   const id = req.params.id;
 
   // get user details
-  const user = await DI.userRepository.findOne(id);
+  const user = await DI.userRepository.findOne(id, ["listings"]);
 
   if (!user) {
     throw new HttpError(404, "User not found");
@@ -19,6 +19,7 @@ export const getUserDetails = async (req: Request, res: Response) => {
     name: user.name,
     email: user.email,
     about: user.about,
+    listings: user.listings,
   };
 
   res.json(userResult);

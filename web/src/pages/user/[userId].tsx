@@ -17,6 +17,7 @@ const UserPage = ({ userId }: Props) => {
 
   const user = response?.data;
   const currentUser = currentUserResponse?.data;
+  console.log(user);
 
   return (
     <>
@@ -32,6 +33,7 @@ const UserPage = ({ userId }: Props) => {
 
           <Heading>{user.name}</Heading>
           <Text>{user.about}</Text>
+          <Heading size="md">Listings</Heading>
         </Stack>
       )}
     </>
