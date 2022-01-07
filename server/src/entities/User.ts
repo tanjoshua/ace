@@ -7,6 +7,9 @@ export class User extends BaseEntity {
   @Property()
   name: string;
 
+  @Property()
+  image: string;
+
   @Property({ unique: true })
   email: string;
 
@@ -15,4 +18,7 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Listing, (listing) => listing.tutor)
   listings = new Collection<Listing>(this);
+
+  @Property()
+  about: string;
 }

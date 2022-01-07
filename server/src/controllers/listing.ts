@@ -36,8 +36,18 @@ export const getListings = async (req: Request, res: Response) => {
 
 export const getListingDetails = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const listing = await DI.listingRepository.findOne(id);
-  res.json(listing);
+  const listing = await DI.listingRepository.findOne(id, ["tutor"]);
+  if (!listing) {
+    throw new HttpError(404, "Listing not found");
+  }
+
+  // keep only relevant info for tutor
+  const listingResult = {
+    ...wrap(listing).toObject(),
+    tutor: { name: listing.tutor.name, id: listing.tutor.id },
+  };
+
+  res.json(listingResult);
 };
 
 export const createListing = async (req: Request, res: Response) => {
@@ -46,6 +56,7 @@ export const createListing = async (req: Request, res: Response) => {
   listing.tutor = req.user!;
   wrap(listing).assign(req.body);
   await DI.listingRepository.persistAndFlush(listing);
+
   res.status(201).json(listing);
 };
 

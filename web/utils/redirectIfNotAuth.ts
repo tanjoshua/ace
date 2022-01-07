@@ -11,8 +11,7 @@ const redirectIfNotAuth = () => {
 
   useEffect(() => {
     if (!isLoading && !response.data) {
-      console.log(response.data);
-      router.replace("/login?next=" + router.pathname);
+      router.replace("/login?next=" + router.asPath);
     }
   }, [isLoading, response, router]);
 };
