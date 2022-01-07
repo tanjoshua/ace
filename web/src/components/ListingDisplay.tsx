@@ -17,11 +17,12 @@ import {
 import React, { useEffect, useState } from "react";
 import listingService from "../../services/listingService";
 import useFetch from "../../utils/useFetch";
+import ListingBox from "./ListingBox";
 
 interface Props {}
 
 const ListingDisplay = ({}: Props) => {
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(5);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [listings, setListings] = useState([]);
@@ -54,32 +55,7 @@ const ListingDisplay = ({}: Props) => {
   return (
     <Stack padding={5}>
       {listings.map((listing) => (
-        <LinkBox p={5} shadow="md" borderWidth="1px" key={listing.id}>
-          <LinkOverlay href={`/listing/${listing.id}`}>
-            <Heading fontSize="xl">{listing.title}</Heading>
-          </LinkOverlay>
-          <Flex mt={2}>
-            {listing.subject.map((subject) => (
-              <Tag key={subject} mr={2}>
-                {subject}
-              </Tag>
-            ))}
-          </Flex>
-          <Flex mt={2}>
-            {listing.level.map((level) => (
-              <Tag key={level} mr={2}>
-                {level}
-              </Tag>
-            ))}
-          </Flex>
-          <Link href={`/user/${listing.tutor.id}`}>
-            <Text fontSize="sm" color="gray.600" mt={2}>
-              Listed by: {listing.tutor.name}
-            </Text>
-          </Link>
-
-          <Text mt={2}>{listing.description}</Text>
-        </LinkBox>
+        <ListingBox listing={listing} key={listing.id} />
       ))}
       <Flex align={"center"}>
         <Text>Page </Text>
