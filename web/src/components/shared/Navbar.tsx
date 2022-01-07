@@ -47,7 +47,7 @@ export default function Simple() {
     userService.getCurrentUser()
   );
   const isLoggedIn = !!response?.data;
-  const user = response?.data.user;
+  const user = response?.data;
 
   return (
     <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
@@ -76,7 +76,7 @@ export default function Simple() {
             direction={"row"}
             spacing={6}
           >
-            <NextLink href="/login" passHref>
+            <NextLink href={`/login?next=${router.asPath}`} passHref>
               <Button
                 as={"a"}
                 fontSize={"sm"}
@@ -86,7 +86,7 @@ export default function Simple() {
                 Login
               </Button>
             </NextLink>
-            <NextLink href="/register" passHref>
+            <NextLink href={`/register?next=${router.asPath}`} passHref>
               <Button
                 display={{ base: "none", md: "inline-flex" }}
                 fontSize={"sm"}

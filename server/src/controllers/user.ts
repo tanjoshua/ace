@@ -14,7 +14,14 @@ export const getUserDetails = async (req: Request, res: Response) => {
     throw new HttpError(404, "User not found");
   }
 
-  res.json({ user });
+  const userResult = {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    about: user.about,
+  };
+
+  res.json(userResult);
 };
 
 export const getCurrentUser = async (req: Request, res: Response) => {
@@ -28,7 +35,12 @@ export const getCurrentUser = async (req: Request, res: Response) => {
       throw new HttpError(404, "User not found");
     }
 
-    res.json({ user });
+    res.json({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      about: user.about,
+    });
   } else {
     res.json();
   }

@@ -52,7 +52,7 @@ const ListingDisplay = ({}: Props) => {
   }
   console.log(listings);
   return (
-    <Stack padding={2}>
+    <Stack padding={5}>
       {listings.map((listing) => (
         <LinkBox p={5} shadow="md" borderWidth="1px" key={listing.id}>
           <LinkOverlay href={`/listing/${listing.id}`}>

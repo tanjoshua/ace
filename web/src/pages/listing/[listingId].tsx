@@ -26,7 +26,7 @@ const ListingPage = ({ listingId }: Props) => {
     <>
       <Navbar />
       {listing && (
-        <Stack padding={2}>
+        <Stack padding={5}>
           <Heading>{listing.title}</Heading>
           <Heading size="md">Subject(s)</Heading>
           <Flex>

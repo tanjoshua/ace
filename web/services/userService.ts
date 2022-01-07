@@ -4,4 +4,8 @@ const getCurrentUser = () => {
   return axiosBase.get("/user/me");
 };
 
-export default { getCurrentUser };
+const getUserById = (userId) => {
+  return axiosBase.get(`/user/${userId}`);
+};
+
+export default { getCurrentUser, getUserById };
