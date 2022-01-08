@@ -29,11 +29,17 @@ const ListingBox = ({ listing }) => {
           </Tag>
         ))}
       </Flex>
-      <Link href={`/user/${listing.tutor.id}`}>
-        <Text fontSize="sm" color="gray.600" mt={2}>
+      {listing.tutor.name && (
+        <Text
+          fontSize="sm"
+          color="gray.600"
+          mt={2}
+          as="a"
+          href={`/user/${listing.tutor.id}`}
+        >
           Listed by: {listing.tutor.name}
         </Text>
-      </Link>
+      )}
 
       <Text mt={2}>{listing.description}</Text>
     </LinkBox>

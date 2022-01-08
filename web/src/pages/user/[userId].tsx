@@ -1,7 +1,16 @@
-import { Avatar, Button, Flex, Heading, Stack, Text } from "@chakra-ui/react";
+import {
+  Avatar,
+  Button,
+  Divider,
+  Flex,
+  Heading,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import React from "react";
 import userService from "../../../services/userService";
 import useFetch from "../../../utils/useFetch";
+import ListingBox from "../../components/ListingBox";
 import Navbar from "../../components/shared/Navbar";
 
 interface Props {
@@ -33,7 +42,11 @@ const UserPage = ({ userId }: Props) => {
 
           <Heading>{user.name}</Heading>
           <Text>{user.about}</Text>
-          <Heading size="md">Listings</Heading>
+          <Heading size="lg">Listings</Heading>
+          <Divider />
+          {user.listings.map((listing) => (
+            <ListingBox listing={listing} key={listing.id} />
+          ))}
         </Stack>
       )}
     </>
