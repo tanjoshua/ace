@@ -5,7 +5,13 @@ export const getListings = (params?) => {
 };
 
 export const createListing = (data) => {
-  return axiosBase.post("/listing", data);
+  const { pricing, pricingDetails, ...body } = data;
+
+  // restructure body
+  return axiosBase.post("/listing", {
+    ...body,
+    pricing: { rate: pricing, details: pricingDetails },
+  });
 };
 
 export const uploadListingImage = (id, image) => {

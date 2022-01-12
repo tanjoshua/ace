@@ -10,6 +10,7 @@ import CreateSelect from "../components/inputs/CreateSelect";
 import ImageUpload from "../components/inputs/ImageUpload";
 import InputField from "../components/inputs/InputField";
 import Multiselect from "../components/inputs/Multiselect";
+import PricingInput from "../components/inputs/PricingInput";
 
 import Navbar from "../components/shared/Navbar";
 
@@ -40,10 +41,11 @@ const createListing = (props: Props) => {
       <Stack padding={5}>
         <Formik
           initialValues={{
-            picture: null,
+            image: null,
             title: "",
             name: "",
             pricing: "",
+            pricingDetails: "",
             level: [],
             subject: [],
             contactInfo: "",
@@ -52,7 +54,7 @@ const createListing = (props: Props) => {
           onSubmit={async (values, { setErrors }) => {
             try {
               // exclude images
-              const { picture, ...listingValues } = values;
+              const { image, ...listingValues } = values;
               console.log(listingValues);
               const response = await listingService.createListing(
                 listingValues
@@ -60,10 +62,12 @@ const createListing = (props: Props) => {
               const id = response.data.id;
 
               // upload image
-              const imageResponse = await listingService.uploadListingImage(
-                id,
-                picture
-              );
+              if (image) {
+                const imageResponse = await listingService.uploadListingImage(
+                  id,
+                  image
+                );
+              }
 
               router.push(`/listing/${id}`);
             } catch (error) {
@@ -109,10 +113,11 @@ const createListing = (props: Props) => {
                   label="Contact Information"
                   textarea
                 />
+                <PricingInput name="pricing" label="Pricing /hr" />
                 <InputField
-                  name="pricing"
-                  placeholder="Describe your fee structure. Example: $X/hr in person, $Y/hr virtual"
-                  label="Pricing"
+                  name="pricingDetails"
+                  placeholder="Elaborate on any details with regards to your fee structure. Eg: group rate, cancellation policy, etc."
+                  label="Pricing Details"
                   textarea
                 />
                 <InputField
