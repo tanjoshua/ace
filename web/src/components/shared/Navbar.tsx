@@ -23,9 +23,9 @@ import userService from "../../../services/userService";
 import authService from "../../../services/authService";
 import { useRouter } from "next/router";
 
-const Links = ["Dashboard", "Projects", "Team"];
+const Links = [{ name: "Search", ref: "/search" }];
 
-const NavLink = ({ children }: { children: ReactNode }) => (
+const NavLink = ({ link }) => (
   <Link
     px={2}
     py={1}
@@ -34,9 +34,9 @@ const NavLink = ({ children }: { children: ReactNode }) => (
       textDecoration: "none",
       bg: useColorModeValue("gray.200", "gray.700"),
     }}
-    href={"#"}
+    href={link.ref}
   >
-    {children}
+    {link.name}
   </Link>
 );
 
@@ -65,7 +65,7 @@ export default function Simple() {
           </NextLink>
           <HStack as={"nav"} spacing={4} display={{ base: "none", md: "flex" }}>
             {Links.map((link) => (
-              <NavLink key={link}>{link}</NavLink>
+              <NavLink link={link} key={link.name}></NavLink>
             ))}
           </HStack>
         </HStack>
@@ -145,7 +145,7 @@ export default function Simple() {
         <Box pb={4} display={{ md: "none" }}>
           <Stack as={"nav"} spacing={4}>
             {Links.map((link) => (
-              <NavLink key={link}>{link}</NavLink>
+              <NavLink link={link} key={link.name}></NavLink>
             ))}
           </Stack>
         </Box>

@@ -8,10 +8,12 @@ import {
   deleteListing,
   getListingLevels,
   getListingSubjects,
+  uploadListingImage,
 } from "../controllers/listing";
 import { Level } from "../entities";
 import auth from "../middleware/auth";
 import handleValidatorErrors from "../middleware/handleValidatorErrors";
+import imageParser from "../middleware/imageParser";
 
 const router = Router();
 
@@ -43,5 +45,12 @@ router.post(
 router.put("/:id", auth, replaceListing);
 
 router.delete("/:id", auth, deleteListing);
+
+router.post(
+  "/:id/image",
+  auth,
+  imageParser.single("image"),
+  uploadListingImage
+);
 
 export default router;

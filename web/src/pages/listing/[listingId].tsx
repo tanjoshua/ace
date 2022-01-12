@@ -6,6 +6,7 @@ import {
   Tag,
   LinkBox,
   LinkOverlay,
+  Avatar,
 } from "@chakra-ui/react";
 import React from "react";
 import listingService from "../../../services/listingService";
@@ -27,6 +28,13 @@ const ListingPage = ({ listingId }: Props) => {
       <Navbar />
       {listing && (
         <Stack padding={5}>
+          <Flex alignItems="center">
+            <Avatar size="2xl" />
+            <Stack ml={5}>
+              <Heading>{listing.title}</Heading>
+              <Text>{listing.name}</Text>
+            </Stack>
+          </Flex>
           <Heading>{listing.title}</Heading>
           <Heading size="md">Subject(s)</Heading>
           <Flex>

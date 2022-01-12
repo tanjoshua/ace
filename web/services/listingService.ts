@@ -8,6 +8,12 @@ export const createListing = (data) => {
   return axiosBase.post("/listing", data);
 };
 
+export const uploadListingImage = (id, image) => {
+  let data = new FormData();
+  data.append("image", image);
+  return axiosBase.post(`/listing/${id}/image`, data);
+};
+
 export const updateListing = (data) => {
   return axiosBase.put("/listing", data);
 };
@@ -31,6 +37,7 @@ export const getSubjects = () => {
 export default {
   getListings,
   createListing,
+  uploadListingImage,
   updateListing,
   getListingById,
   deleteListingById,

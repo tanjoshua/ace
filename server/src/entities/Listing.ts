@@ -7,6 +7,12 @@ export class Listing extends BaseEntity {
   @Property()
   title: string;
 
+  @Property()
+  name: string;
+
+  @Property()
+  image: { url: string; id: string };
+
   @ManyToOne()
   tutor: User;
 
@@ -17,7 +23,7 @@ export class Listing extends BaseEntity {
   subject: string[];
 
   @Property()
-  pricing: string;
+  pricing: { rate: number; details: string };
 
   @Property()
   description: string;
