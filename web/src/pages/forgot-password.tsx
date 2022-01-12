@@ -11,7 +11,7 @@ import router from "next/router";
 import React, { useState } from "react";
 import authService from "../../services/authService";
 import { toErrorMap } from "../../utils/toErrorMap";
-import InputField from "../components/shared/InputField";
+import InputField from "../components/inputs/InputField";
 import Navbar from "../components/shared/Navbar";
 
 interface Props {}

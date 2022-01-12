@@ -1,5 +1,4 @@
-import { FormControl, FormLabel, Image } from "@chakra-ui/react";
-import { Select } from "chakra-react-select";
+import { FormControl, Image } from "@chakra-ui/react";
 import { useField } from "formik";
 import React, { useRef, useState } from "react";
 

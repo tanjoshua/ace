@@ -6,10 +6,10 @@ import listingService from "../../services/listingService";
 import redirectIfNotAuth from "../../utils/redirectIfNotAuth";
 import { toErrorMap } from "../../utils/toErrorMap";
 import useFetch from "../../utils/useFetch";
-import CreateSelect from "../components/shared/CreateSelect";
-import ImageUpload from "../components/shared/ImageUpload";
-import InputField from "../components/shared/InputField";
-import Multiselect from "../components/shared/Multiselect";
+import CreateSelect from "../components/inputs/CreateSelect";
+import ImageUpload from "../components/inputs/ImageUpload";
+import InputField from "../components/inputs/InputField";
+import Multiselect from "../components/inputs/Multiselect";
 
 import Navbar from "../components/shared/Navbar";
 

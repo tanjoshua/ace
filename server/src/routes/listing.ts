@@ -30,13 +30,13 @@ router.post(
   auth,
   [
     body("title").notEmpty().withMessage("Title is a required field"),
+    body("name").notEmpty().withMessage("Name is a required field"),
     body("level").isArray(),
     body("level.*").isIn(Object.values(Level)),
     body("subject").isArray(),
     body("contactInfo")
       .notEmpty()
       .withMessage("Contact information is required"),
-    body("pricing").notEmpty().withMessage("Pricing information is required"),
   ],
   handleValidatorErrors,
   createListing
