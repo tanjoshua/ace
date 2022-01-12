@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { QueryOrder, wrap } from "@mikro-orm/core";
+import { v2 as cloudinary } from "cloudinary";
 
 import { DI } from "../index";
 import { Listing, Level, subjects } from "../entities/Listing";
@@ -58,6 +59,36 @@ export const createListing = async (req: Request, res: Response) => {
   await DI.listingRepository.persistAndFlush(listing);
 
   res.status(201).json(listing);
+};
+
+export const uploadListingImage = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const listing = await DI.listingRepository.findOne(id);
+
+  if (!listing) {
+    throw new HttpError(404, "Listing not found");
+  }
+
+  // check that user is owner
+  if (listing.tutor.id !== req.session.userId) {
+    throw new HttpError(403, "Forbidden - User not owner");
+  }
+
+  // delete old image and upload new image
+  if (req.file) {
+    // delete image if exists
+    if (listing.image && listing.image.id) {
+      // remove existing image
+      await cloudinary.uploader.destroy(listing.image.id);
+    }
+
+    // upload image
+    listing.image = { url: req.file.path, id: req.file.filename };
+    await DI.listingRepository.flush();
+  }
+
+  res.json(listing);
 };
 
 export const replaceListing = async (req: Request, res: Response) => {

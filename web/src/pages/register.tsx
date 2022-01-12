@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 
 import Navbar from "../components/shared/Navbar";
-import InputField from "../components/shared/InputField";
+import InputField from "../components/inputs/InputField";
 import authService from "../../services/authService";
 import { toErrorMap } from "../../utils/toErrorMap";
 import { useRouter } from "next/router";

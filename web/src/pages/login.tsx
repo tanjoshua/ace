@@ -1,6 +1,6 @@
 import React from "react";
 import { Form, Formik } from "formik";
-import InputField from "../components/shared/InputField";
+import InputField from "../components/inputs/InputField";
 import {
   Box,
   Button,

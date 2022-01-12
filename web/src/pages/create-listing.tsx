@@ -1,14 +1,16 @@
-import { Button, Stack } from "@chakra-ui/react";
+import { Avatar, Button, Stack, Image } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import listingService from "../../services/listingService";
 import redirectIfNotAuth from "../../utils/redirectIfNotAuth";
 import { toErrorMap } from "../../utils/toErrorMap";
 import useFetch from "../../utils/useFetch";
-import CreateSelect from "../components/shared/CreateSelect";
-import InputField from "../components/shared/InputField";
-import Multiselect from "../components/shared/Multiselect";
+import CreateSelect from "../components/inputs/CreateSelect";
+import ImageUpload from "../components/inputs/ImageUpload";
+import InputField from "../components/inputs/InputField";
+import Multiselect from "../components/inputs/Multiselect";
+import PricingInput from "../components/inputs/PricingInput";
 
 import Navbar from "../components/shared/Navbar";
 
@@ -39,8 +41,11 @@ const createListing = (props: Props) => {
       <Stack padding={5}>
         <Formik
           initialValues={{
+            image: null,
             title: "",
+            name: "",
             pricing: "",
+            pricingDetails: "",
             level: [],
             subject: [],
             contactInfo: "",
@@ -48,9 +53,22 @@ const createListing = (props: Props) => {
           }}
           onSubmit={async (values, { setErrors }) => {
             try {
-              console.log(values);
-              const response = await listingService.createListing(values);
+              // exclude images
+              const { image, ...listingValues } = values;
+              console.log(listingValues);
+              const response = await listingService.createListing(
+                listingValues
+              );
               const id = response.data.id;
+
+              // upload image
+              if (image) {
+                const imageResponse = await listingService.uploadListingImage(
+                  id,
+                  image
+                );
+              }
+
               router.push(`/listing/${id}`);
             } catch (error) {
               if (error.response?.status === 401) {
@@ -68,7 +86,17 @@ const createListing = (props: Props) => {
           {({ isSubmitting }) => (
             <Form>
               <Stack>
-                <InputField name="title" placeholder="Title" label="Title" />
+                <ImageUpload name="picture" />
+                <InputField
+                  name="title"
+                  placeholder="Brief description"
+                  label="Title"
+                />
+                <InputField
+                  name="name"
+                  placeholder="Name of tutor"
+                  label="Name"
+                />
                 <Multiselect
                   options={levelsIsLoading ? [] : levels}
                   name="level"
@@ -85,10 +113,11 @@ const createListing = (props: Props) => {
                   label="Contact Information"
                   textarea
                 />
+                <PricingInput name="pricing" label="Pricing /hr" />
                 <InputField
-                  name="pricing"
-                  placeholder="Describe your fee structure. Example: $X/hr in person, $Y/hr virtual"
-                  label="Pricing"
+                  name="pricingDetails"
+                  placeholder="Elaborate on any details with regards to your fee structure. Eg: group rate, cancellation policy, etc."
+                  label="Pricing Details"
                   textarea
                 />
                 <InputField

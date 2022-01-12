@@ -6,9 +6,13 @@ import {
   Tag,
   LinkBox,
   LinkOverlay,
+  Avatar,
+  Button,
+  Divider,
 } from "@chakra-ui/react";
 import React from "react";
 import listingService from "../../../services/listingService";
+import userService from "../../../services/userService";
 import useFetch from "../../../utils/useFetch";
 import Navbar from "../../components/shared/Navbar";
 
@@ -21,13 +25,32 @@ const ListingPage = ({ listingId }: Props) => {
     listingService.getListingById(listingId)
   );
   const listing = response?.data;
+  console.log(listing);
+
+  const [currentUserIsLoading, currentUserResponse, currentUserError] =
+    useFetch(() => userService.getCurrentUser());
+
+  const currentUser = currentUserResponse?.data;
 
   return (
     <>
       <Navbar />
       {listing && (
         <Stack padding={5}>
-          <Heading>{listing.title}</Heading>
+          <Flex alignItems="center" justify="space-between">
+            <Flex alignItems="center">
+              <Avatar size="2xl" alignItems="center" />
+              <Stack ml={5}>
+                <Heading>{listing.title}</Heading>
+                <Text>{listing.name}</Text>
+              </Stack>
+            </Flex>
+            {!currentUserIsLoading && currentUser.id === listing.tutor.id && (
+              <Button>Edit</Button>
+            )}
+          </Flex>
+          <Divider />
+
           <Heading size="md">Subject(s)</Heading>
           <Flex>
             {listing.subject.map((subject) => (
@@ -44,18 +67,20 @@ const ListingPage = ({ listingId }: Props) => {
               </Tag>
             ))}
           </Flex>
+          <Divider />
+
           <Heading size="md">Description</Heading>
           <Text>{listing.description}</Text>
+          <Divider />
+
           <Heading size="md">Pricing</Heading>
-          <Text>{listing.pricing}</Text>
+          <Text>{listing.pricing.rate}/hr</Text>
+          <Text>{listing.pricing.details}</Text>
+          <Divider />
+
           <Heading size="md">Contact Information</Heading>
           <Text>{listing.contactInfo}</Text>
-          <Heading size="md">About The Tutor</Heading>
-          <LinkBox p={5} shadow="md" borderWidth="1px">
-            <LinkOverlay href={`/user/${listing.tutor.id}`}>
-              <Heading size="sm">{listing.tutor.name}</Heading>
-            </LinkOverlay>
-          </LinkBox>
+          <Divider />
         </Stack>
       )}
     </>
