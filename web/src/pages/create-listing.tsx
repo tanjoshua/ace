@@ -1,7 +1,7 @@
-import { Avatar, Button, Stack, Image } from "@chakra-ui/react";
+import { Button, Stack } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import listingService from "../../services/listingService";
 import redirectIfNotAuth from "../../utils/redirectIfNotAuth";
 import { toErrorMap } from "../../utils/toErrorMap";
@@ -60,6 +60,7 @@ const createListing = (props: Props) => {
                 listingValues
               );
               const id = response.data.id;
+              console.log(image);
 
               // upload image
               if (image) {
@@ -67,6 +68,7 @@ const createListing = (props: Props) => {
                   id,
                   image
                 );
+                console.log(imageResponse);
               }
 
               router.push(`/listing/${id}`);
@@ -86,7 +88,7 @@ const createListing = (props: Props) => {
           {({ isSubmitting }) => (
             <Form>
               <Stack>
-                <ImageUpload name="picture" />
+                <ImageUpload name="image" />
                 <InputField
                   name="title"
                   placeholder="Brief description"
@@ -97,20 +99,20 @@ const createListing = (props: Props) => {
                   placeholder="Name of tutor"
                   label="Name"
                 />
-                <Multiselect
-                  options={levelsIsLoading ? [] : levels}
-                  name="level"
-                  label="Level(s)"
-                />
                 <CreateSelect
                   options={subjectsIsLoading ? [] : subjects}
                   name="subject"
                   label="Subject(s)"
                 />
+                <Multiselect
+                  options={levelsIsLoading ? [] : levels}
+                  name="level"
+                  label="Level(s)"
+                />
                 <InputField
-                  name="contactInfo"
-                  placeholder="Let your potential students know how they can contact you."
-                  label="Contact Information"
+                  name="description"
+                  placeholder="Tell your potential students more about yourself."
+                  label="Description"
                   textarea
                 />
                 <PricingInput name="pricing" label="Pricing /hr" />
@@ -121,9 +123,9 @@ const createListing = (props: Props) => {
                   textarea
                 />
                 <InputField
-                  name="description"
-                  placeholder="Type anything you want your potential students to know about you."
-                  label="Description"
+                  name="contactInfo"
+                  placeholder="Let your potential students know how they can contact you."
+                  label="Contact Information"
                   textarea
                 />
 

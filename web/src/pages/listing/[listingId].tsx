@@ -9,6 +9,7 @@ import {
   Avatar,
   Button,
   Divider,
+  Link,
 } from "@chakra-ui/react";
 import React from "react";
 import listingService from "../../../services/listingService";
@@ -25,7 +26,6 @@ const ListingPage = ({ listingId }: Props) => {
     listingService.getListingById(listingId)
   );
   const listing = response?.data;
-  console.log(listing);
 
   const [currentUserIsLoading, currentUserResponse, currentUserError] =
     useFetch(() => userService.getCurrentUser());
@@ -39,14 +39,16 @@ const ListingPage = ({ listingId }: Props) => {
         <Stack padding={5}>
           <Flex alignItems="center" justify="space-between">
             <Flex alignItems="center">
-              <Avatar size="2xl" alignItems="center" />
+              <Avatar size="2xl" alignItems="center" src={listing.image?.url} />
               <Stack ml={5}>
                 <Heading>{listing.title}</Heading>
                 <Text>{listing.name}</Text>
               </Stack>
             </Flex>
             {!currentUserIsLoading && currentUser.id === listing.tutor.id && (
-              <Button>Edit</Button>
+              <Link href={`/listing/edit/${listingId}`}>
+                <Button>Edit</Button>
+              </Link>
             )}
           </Flex>
           <Divider />

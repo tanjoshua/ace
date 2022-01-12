@@ -6,11 +6,11 @@ import React from "react";
 interface Props {
   label: string;
   name: string;
-  options: string[];
+  options: { value: string; label: string }[];
 }
 
 const Multiselect = ({ label, options, ...props }: Props) => {
-  const [field, { error }, helpers] = useField(props);
+  const [field, { value }, helpers] = useField(props);
   const { setValue } = helpers;
 
   return (
@@ -21,6 +21,7 @@ const Multiselect = ({ label, options, ...props }: Props) => {
         options={options}
         {...props}
         onChange={(selected) => setValue(selected.map((x) => x.value))}
+        value={options.filter((option) => field.value.includes(option.value))}
       />
     </FormControl>
   );
