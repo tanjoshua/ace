@@ -14,6 +14,7 @@ import {
   LinkBox,
   LinkOverlay,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import listingService from "../../services/listingService";
 import useFetch from "../../utils/useFetch";
@@ -22,7 +23,9 @@ import ListingBox from "./ListingBox";
 interface Props {}
 
 const ListingDisplay = ({}: Props) => {
-  const [limit, setLimit] = useState(5);
+  const router = useRouter();
+
+  const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [listings, setListings] = useState([]);
@@ -34,7 +37,7 @@ const ListingDisplay = ({}: Props) => {
       let response;
 
       try {
-        response = await listingService.getListings({ page });
+        response = await listingService.getListings({ page, ...router.query });
       } catch (e) {
         setIsLoading(false);
         return;
@@ -46,12 +49,12 @@ const ListingDisplay = ({}: Props) => {
     };
 
     fetchListings();
-  }, [page, limit]);
+  }, [page, limit, router.query]);
 
   if (isLoading) {
     return <></>;
   }
-  console.log(listings);
+  // console.log(listings);
   return (
     <Stack padding={5}>
       {listings.map((listing) => (

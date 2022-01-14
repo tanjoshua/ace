@@ -13,15 +13,34 @@ export const getListings = async (req: Request, res: Response) => {
   const page = req.query.page || 1;
   const limit = req.query.limit || 5;
 
-  const [listings, count] = await DI.listingRepository.findAndCount(
-    {},
-    {
-      offset: (+page - 1) * +limit,
-      limit: +limit,
-      orderBy: { createdAt: QueryOrder.DESC },
-      populate: ["tutor"],
-    }
-  );
+  // process search queries
+  const searchQuery = [];
+  if (req.query.level) {
+    searchQuery.push({ level: req.query.level });
+  }
+
+  if (req.query.subject) {
+    console.log(req.query.subject);
+    searchQuery.push({
+      $or: [
+        { subject: req.query.subject },
+        { title: { $re: req.query.subject } },
+        { description: { $re: req.query.subject } },
+      ],
+    });
+  }
+
+  let filter = {};
+  if (searchQuery.length !== 0) {
+    filter = { $and: searchQuery };
+  }
+
+  const [listings, count] = await DI.listingRepository.findAndCount(filter, {
+    offset: (+page - 1) * +limit,
+    limit: +limit,
+    orderBy: { createdAt: QueryOrder.DESC },
+    populate: ["tutor"],
+  });
 
   // keep only relevant info for tutor
   const listingsResult = listings.map((listing) => ({

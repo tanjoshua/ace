@@ -21,7 +21,7 @@ const Multiselect = ({ label, options, ...props }: Props) => {
         options={options}
         {...props}
         onChange={(selected) => setValue(selected.map((x) => x.value))}
-        value={options.filter((option) => field.value.includes(option.value))}
+        value={field.value.map((x) => ({ value: x, label: x }))}
       />
     </FormControl>
   );

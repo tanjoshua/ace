@@ -7,9 +7,10 @@ interface Props {
   label: string;
   name: string;
   options: { value: string; label: string }[];
+  formatCreateLabel?: any;
 }
 
-const CreateSelect = ({ label, options, ...props }: Props) => {
+const SingleCreateSelect = ({ label, options, ...props }: Props) => {
   const [field, { error }, helpers] = useField(props);
   const { setValue } = helpers;
 
@@ -17,14 +18,17 @@ const CreateSelect = ({ label, options, ...props }: Props) => {
     <FormControl>
       <FormLabel>{label}</FormLabel>
       <CreatableSelect
-        isMulti
         options={options}
         {...props}
-        onChange={(selected) => setValue(selected.map((x) => x.value))}
-        value={field.value.map((x) => ({ value: x, label: x }))}
+        onChange={(selected) => setValue(selected?.value)}
+        value={{
+          label: field.value,
+          value: field.value,
+        }}
+        isClearable
       />
     </FormControl>
   );
 };
 
-export default CreateSelect;
+export default SingleCreateSelect;
