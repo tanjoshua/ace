@@ -56,7 +56,7 @@ const ListingDisplay = ({}: Props) => {
   }
   // console.log(listings);
   return (
-    <Stack padding={5}>
+    <Stack>
       {listings.map((listing) => (
         <ListingBox listing={listing} key={listing.id} />
       ))}
