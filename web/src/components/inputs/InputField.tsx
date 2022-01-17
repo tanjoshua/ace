@@ -11,15 +11,16 @@ import React, { InputHTMLAttributes } from "react";
 type Props = InputHTMLAttributes<HTMLInputElement> & {
   label: string;
   name: string;
+  size?: string;
   textarea?: boolean;
 };
 
-const InputField = ({ label, textarea, size: _, ...props }: Props) => {
+const InputField = ({ label, textarea, size, ...props }: Props) => {
   const [field, { error }, helpers] = useField(props);
 
-  let InputDisplay: any = Input
+  let InputDisplay: any = Input;
   if (textarea) {
-    InputDisplay = Textarea
+    InputDisplay = Textarea;
   }
 
   return (

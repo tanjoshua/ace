@@ -7,7 +7,7 @@ const storage = new CloudinaryStorage({
   params: {
     // I have no idea why ts is raising an error
     // @ts-ignore
-    folder: "images",
+    folder: "listing-images",
   },
 });
 

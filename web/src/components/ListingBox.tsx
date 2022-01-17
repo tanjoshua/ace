@@ -5,6 +5,9 @@ import {
   Flex,
   Tag,
   Text,
+  Avatar,
+  Box,
+  Divider,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import React from "react";
@@ -12,9 +15,16 @@ import React from "react";
 const ListingBox = ({ listing }) => {
   return (
     <LinkBox p={5} shadow="md" borderWidth="1px" key={listing.id}>
-      <LinkOverlay href={`/listing/${listing.id}`}>
-        <Heading fontSize="xl">{listing.title}</Heading>
-      </LinkOverlay>
+      <Flex alignItems="center">
+        <Avatar size="lg" alignItems="center" src={listing.image?.url} />
+        <Box ml={5}>
+          <LinkOverlay href={`/listing/${listing.id}`}>
+            <Heading fontSize="xl">{listing.title}</Heading>
+          </LinkOverlay>
+          <Text>{listing.name}</Text>
+        </Box>
+      </Flex>
+
       <Flex mt={2}>
         {listing.subject.map((subject) => (
           <Tag key={subject} mr={2}>
@@ -29,19 +39,15 @@ const ListingBox = ({ listing }) => {
           </Tag>
         ))}
       </Flex>
-      {listing.tutor.name && (
-        <Text
-          fontSize="sm"
-          color="gray.600"
-          mt={2}
-          as="a"
-          href={`/user/${listing.tutor.id}`}
-        >
-          Listed by: {listing.tutor.name}
-        </Text>
-      )}
+      <Divider mt={2} />
+      <Box mt={2}>
+        <Text>${listing.pricing.rate}/hr</Text>
+      </Box>
+      <Divider mt={2} />
 
-      <Text mt={2}>{listing.description}</Text>
+      <Text mt={2} noOfLines={3}>
+        {listing.description}
+      </Text>
     </LinkBox>
   );
 };

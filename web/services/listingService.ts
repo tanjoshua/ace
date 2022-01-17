@@ -15,13 +15,17 @@ export const createListing = (data) => {
 };
 
 export const uploadListingImage = (id, image) => {
-  let data = new FormData();
-  data.append("image", image);
-  return axiosBase.post(`/listing/${id}/image`, data);
+  let formData = new FormData();
+  formData.append("image", image);
+  return axiosBase.post(`/listing/${id}/image`, formData);
 };
 
-export const updateListing = (data) => {
-  return axiosBase.put("/listing", data);
+export const updateListing = (id, data) => {
+  const { pricing, pricingDetails, ...body } = data;
+  return axiosBase.put(`/listing/${id}`, {
+    ...body,
+    pricing: { rate: pricing, details: pricingDetails },
+  });
 };
 
 export const getListingById = (id) => {

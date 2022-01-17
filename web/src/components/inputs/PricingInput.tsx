@@ -29,6 +29,7 @@ const PricingInput = ({ label, ...props }: Props) => {
         id={field.name}
         min={0}
         onChange={(value) => setValue(parseInt(value))}
+        value={field.value}
       >
         <NumberInputField />
         <NumberInputStepper>
