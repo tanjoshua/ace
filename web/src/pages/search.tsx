@@ -1,5 +1,20 @@
-import { SearchIcon } from "@chakra-ui/icons";
-import { Box, Button, Flex, HStack, Stack, Text } from "@chakra-ui/react";
+import { ChevronDownIcon, SearchIcon } from "@chakra-ui/icons";
+import {
+  Accordion,
+  AccordionButton,
+  AccordionItem,
+  AccordionPanel,
+  Box,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  GridItem,
+  HStack,
+  Link,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React from "react";
@@ -12,6 +27,13 @@ import ListingDisplay from "../components/ListingDisplay";
 import Navbar from "../components/shared/Navbar";
 
 interface Props {}
+
+const listingOrder = [
+  { label: "Recent", value: "recent" },
+  { label: "Oldest", value: "old" },
+  { label: "Cheapest", value: "cheap" },
+  { label: "Most Expensive", value: "exp" },
+];
 
 const SearchPage = (props: Props) => {
   // handle search queries
@@ -43,6 +65,7 @@ const SearchPage = (props: Props) => {
           initialValues={{
             subject: subjectQuery,
             level: levelQuery,
+            orderBy: null,
           }}
           onSubmit={async (values, { setErrors }) => {
             router.push({ pathname: "/search", query: values });
@@ -72,12 +95,55 @@ const SearchPage = (props: Props) => {
                     </Button>
                   </Box>
                 </HStack>
+                <Accordion allowToggle>
+                  <AccordionItem>
+                    <AccordionButton _focus={{ outline: 0 }}>
+                      <Box flex="1" textAlign={"right"}>
+                        Search Filters <ChevronDownIcon />
+                      </Box>
+                    </AccordionButton>
+                    <AccordionPanel>
+                      <Grid templateColumns="repeat(3, 1fr)">
+                        <GridItem></GridItem>
+                        <GridItem></GridItem>
+                        <GridItem>
+                          <Stack>
+                            <Text>Order By</Text>
+                            <Divider />
+                            {listingOrder.map((option) =>
+                              router.query.order === option.value ||
+                              (!router.query.order &&
+                                option.value === "recent") ? (
+                                <Text fontWeight={"bold"}>{option.label}</Text>
+                              ) : (
+                                <Link
+                                  onClick={() =>
+                                    router.push({
+                                      pathname: "/search",
+                                      query: {
+                                        ...router.query,
+                                        order: option.value,
+                                        page: 1,
+                                      },
+                                    })
+                                  }
+                                >
+                                  {option.label}
+                                </Link>
+                              )
+                            )}
+                          </Stack>
+                        </GridItem>
+                      </Grid>
+                    </AccordionPanel>
+                  </AccordionItem>
+                </Accordion>
               </Stack>
             </Form>
           )}
         </Formik>
+        <ListingDisplay />
       </Box>
-      <ListingDisplay />
     </>
   );
 };

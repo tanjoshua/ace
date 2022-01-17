@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { QueryOrder, wrap } from "@mikro-orm/core";
+import { wrap } from "@mikro-orm/core";
 import { v2 as cloudinary } from "cloudinary";
 
 import { DI } from "../index";
@@ -35,10 +35,26 @@ export const getListings = async (req: Request, res: Response) => {
     filter = { $and: searchQuery };
   }
 
+  // determine order
+  let orderBy: any = { createdAt: "desc" };
+  if (req.query.order) {
+    switch (req.query.order) {
+      case "old":
+        orderBy = { createdAt: "asc" };
+        break;
+      case "cheap":
+        orderBy = { "pricing.rate": "asc" };
+        break;
+      case "exp":
+        orderBy = { "pricing.rate": "desc" };
+        break;
+    }
+  }
+
   const [listings, count] = await DI.listingRepository.findAndCount(filter, {
     offset: (+page - 1) * +limit,
     limit: +limit,
-    orderBy: { createdAt: QueryOrder.DESC },
+    orderBy,
     populate: ["tutor"],
   });
 

@@ -25,8 +25,6 @@ interface Props {}
 const ListingDisplay = ({}: Props) => {
   const router = useRouter();
 
-  const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [listings, setListings] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -37,19 +35,19 @@ const ListingDisplay = ({}: Props) => {
       let response;
 
       try {
-        response = await listingService.getListings({ page, ...router.query });
+        response = await listingService.getListings({ ...router.query });
       } catch (e) {
         setIsLoading(false);
         return;
       }
 
       setListings(response.data.listings);
-      setTotalPages(Math.ceil(response.data.count / limit));
+      setTotalPages(Math.ceil(response.data.count / 5));
       setIsLoading(false);
     };
 
     fetchListings();
-  }, [page, limit, router.query]);
+  }, [router.query]);
 
   if (isLoading) {
     return <></>;
@@ -67,10 +65,16 @@ const ListingDisplay = ({}: Props) => {
           maxW={20}
           min={1}
           max={totalPages}
-          defaultValue={page}
+          defaultValue={(router.query.page as string) || 1}
           mx={2}
           onChange={(value) => {
-            setPage(parseInt(value));
+            router.push({
+              pathname: "/search",
+              query: {
+                ...router.query,
+                page: parseInt(value),
+              },
+            });
           }}
         >
           <NumberInputField />
