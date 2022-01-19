@@ -10,10 +10,12 @@ import {
   Button,
   Divider,
   Link,
+  HStack,
 } from "@chakra-ui/react";
 import React from "react";
 import listingService from "../../../services/listingService";
 import userService from "../../../services/userService";
+import { DAY } from "../../../utils/constants";
 import useFetch from "../../../utils/useFetch";
 import Navbar from "../../components/shared/Navbar";
 
@@ -26,6 +28,7 @@ const ListingPage = ({ listingId }: Props) => {
     listingService.getListingById(listingId)
   );
   const listing = response?.data;
+  console.log(listing);
 
   const [currentUserIsLoading, currentUserResponse, currentUserError] =
     useFetch(() => userService.getCurrentUser());
@@ -73,6 +76,20 @@ const ListingPage = ({ listingId }: Props) => {
 
           <Heading size="md">Description</Heading>
           <Text>{listing.description}</Text>
+          <Divider />
+
+          <Heading size="md">Schedule</Heading>
+          {listing.schedule.map(
+            (element, index) =>
+              element && (
+                <HStack>
+                  <Text textTransform={"capitalize"} minWidth={40}>
+                    {DAY[index]}
+                  </Text>
+                  <Text>{element}</Text>
+                </HStack>
+              )
+          )}
           <Divider />
 
           <Heading size="md">Pricing</Heading>

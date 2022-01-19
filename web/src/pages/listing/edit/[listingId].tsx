@@ -12,6 +12,7 @@ import ImageUpload from "../../../components/inputs/ImageUpload";
 import InputField from "../../../components/inputs/InputField";
 import Multiselect from "../../../components/inputs/Multiselect";
 import PricingInput from "../../../components/inputs/PricingInput";
+import ScheduleInput from "../../../components/inputs/ScheduleInput";
 
 import Navbar from "../../../components/shared/Navbar";
 
@@ -59,11 +60,13 @@ const EditListing = ({ listingId }: Props) => {
               subject: listing.subject,
               contactInfo: listing.contactInfo,
               description: listing.description,
+              schedule: listing.schedule,
             }}
             onSubmit={async (values, { setErrors }) => {
               try {
                 // exclude images
                 const { image, ...listingValues } = values;
+                console.log(listingValues);
                 const response = await listingService.updateListing(
                   listingId,
                   listingValues
@@ -122,6 +125,7 @@ const EditListing = ({ listingId }: Props) => {
                     label="Description"
                     textarea
                   />
+                  <ScheduleInput name="schedule" label="Schedule" />
                   <PricingInput name="pricing" label="Pricing /hr" />
                   <InputField
                     name="pricingDetails"

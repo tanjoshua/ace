@@ -29,6 +29,9 @@ export class Listing extends BaseEntity {
   description: string;
 
   @Property()
+  schedule: string[];
+
+  @Property()
   contactInfo: string;
 }
 
