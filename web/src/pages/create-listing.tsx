@@ -65,7 +65,6 @@ const createListing = (props: Props) => {
             contactInfo: "",
             description: "",
             schedule: initialSchedule,
-            mode: [],
             online: false,
             inPerson: false,
           }}
@@ -134,7 +133,6 @@ const createListing = (props: Props) => {
                   textarea
                 />
                 <CheckboxInput
-                  name="mode"
                   label="Mode of Instruction"
                   options={[
                     { label: "Online", value: "online" },
