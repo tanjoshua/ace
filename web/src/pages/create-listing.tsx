@@ -1,11 +1,12 @@
 import { Button, Stack } from "@chakra-ui/react";
-import { Form, Formik } from "formik";
+import { Field, Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React from "react";
 import listingService from "../../services/listingService";
 import redirectIfNotAuth from "../../utils/redirectIfNotAuth";
 import { toErrorMap } from "../../utils/toErrorMap";
 import useFetch from "../../utils/useFetch";
+import CheckboxInput from "../components/inputs/CheckboxInput";
 import CreateSelect from "../components/inputs/CreateSelect";
 import ImageUpload from "../components/inputs/ImageUpload";
 import InputField from "../components/inputs/InputField";
@@ -64,6 +65,9 @@ const createListing = (props: Props) => {
             contactInfo: "",
             description: "",
             schedule: initialSchedule,
+            mode: [],
+            online: false,
+            inPerson: false,
           }}
           onSubmit={async (values, { setErrors }) => {
             try {
@@ -128,6 +132,14 @@ const createListing = (props: Props) => {
                   placeholder="Tell your potential students more about yourself."
                   label="Description"
                   textarea
+                />
+                <CheckboxInput
+                  name="mode"
+                  label="Mode of Instruction"
+                  options={[
+                    { label: "Online", value: "online" },
+                    { label: "In Person", value: "inPerson" },
+                  ]}
                 />
                 <ScheduleInput name="schedule" label="Schedule" />
                 <PricingInput name="pricing" label="Pricing /hr" />

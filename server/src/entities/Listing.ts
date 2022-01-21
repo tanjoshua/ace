@@ -33,6 +33,12 @@ export class Listing extends BaseEntity {
 
   @Property()
   contactInfo: string;
+
+  @Property()
+  online: boolean;
+
+  @Property()
+  inPerson: boolean;
 }
 
 export enum Level {
