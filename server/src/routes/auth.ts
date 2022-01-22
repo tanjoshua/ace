@@ -31,7 +31,6 @@ router.post(
       .trim()
       .isLength({ min: 6 })
       .withMessage("Password must be at least 6 characters"),
-    body("name").trim().notEmpty().withMessage("Name cannot be empty"),
   ],
   handleValidatorErrors,
   register

@@ -60,7 +60,6 @@ const register = (props: Props) => {
               {({ isSubmitting }) => (
                 <Form>
                   <Stack spacing={4}>
-                    <InputField name="name" placeholder="Name" label="Name" />
                     <InputField
                       name="email"
                       placeholder="Email"

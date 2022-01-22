@@ -5,9 +5,6 @@ import { Listing } from ".";
 @Entity()
 export class User extends BaseEntity {
   @Property()
-  name: string;
-
-  @Property()
   image: string;
 
   @Property({ unique: true })

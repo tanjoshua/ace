@@ -4,7 +4,6 @@ import { wrap } from "@mikro-orm/core";
 import { v4 } from "uuid";
 
 import { User } from "../entities/User";
-import { createToken } from "../utils/tokenService";
 import HttpError from "../errors/HttpError";
 import { DI } from "..";
 import { COOKIE_NAME } from "../utils/config";
@@ -13,7 +12,7 @@ import { sendEmail } from "../utils/emailService";
 require("express-async-errors");
 
 export const register = async (req: Request, res: Response) => {
-  const { name, email, password } = req.body;
+  const { email, password } = req.body;
 
   // reject if email already exists
   const existingUser = await DI.userRepository.findOne({ email });
@@ -25,14 +24,13 @@ export const register = async (req: Request, res: Response) => {
 
   // create user
   const user = new User();
-  wrap(user).assign({ name, email, password: hashedPassword });
+  wrap(user).assign({ email, password: hashedPassword });
   await DI.userRepository.persistAndFlush(user);
 
   req.session.userId = user.id;
-  const token = createToken({ userId: user.id, name: user.name });
 
   // save into db
-  res.status(201).json({ userId: user.id, token });
+  res.status(201).json({ userId: user.id });
 };
 
 export const login = async (req: Request, res: Response) => {
@@ -52,8 +50,7 @@ export const login = async (req: Request, res: Response) => {
 
   // verified
   req.session.userId = user.id;
-  const token = createToken({ userId: user.id, name: user.name });
-  res.json({ userId: user.id, token });
+  res.json({ userId: user.id });
 };
 
 export const logout = async (req: Request, res: Response) => {

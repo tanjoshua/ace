@@ -16,7 +16,6 @@ export const getUserDetails = async (req: Request, res: Response) => {
 
   const userResult = {
     id: user.id,
-    name: user.name,
     email: user.email,
     about: user.about,
     listings: user.listings,
@@ -38,7 +37,6 @@ export const getCurrentUser = async (req: Request, res: Response) => {
 
     res.json({
       id: user.id,
-      name: user.name,
       email: user.email,
       about: user.about,
     });
@@ -60,7 +58,6 @@ export const getCurrentUserDetails = async (req: Request, res: Response) => {
 
     res.json({
       id: user.id,
-      name: user.name,
       email: user.email,
       listings: user.listings,
     });
