@@ -82,7 +82,7 @@ const ListingPage = ({ listingId }: Props) => {
           {listing.schedule.map(
             (element, index) =>
               element && (
-                <HStack>
+                <HStack key={index}>
                   <Text textTransform={"capitalize"} minWidth={40}>
                     {DAY[index]}
                   </Text>
@@ -92,9 +92,23 @@ const ListingPage = ({ listingId }: Props) => {
           )}
           <Divider />
 
-          <Heading size="md">Pricing</Heading>
-          <Text>{listing.pricing.rate}/hr</Text>
-          <Text>{listing.pricing.details}</Text>
+          <Heading size="md">Lesson details</Heading>
+          <Text>
+            Offers
+            <Text as="span" fontWeight={"bold"}>
+              {listing.online && " online"}
+              {listing.online && listing.inPerson && " and "}
+              {listing.inPerson && " in person "}{" "}
+            </Text>
+            lessons
+          </Text>
+          <Text>
+            Hourly Rate:{" "}
+            <Text as="span" fontWeight={"bold"}>
+              ${listing.pricing.rate}/hr
+            </Text>
+          </Text>
+          <Text>Rate details: {listing.pricing.details}</Text>
           <Divider />
 
           <Heading size="md">Contact Information</Heading>

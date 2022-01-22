@@ -7,6 +7,7 @@ import redirectIfNotAuth from "../../../../utils/redirectIfNotAuth";
 import redirectIfNotUser from "../../../../utils/redirectIfNotUser";
 import { toErrorMap } from "../../../../utils/toErrorMap";
 import useFetch from "../../../../utils/useFetch";
+import CheckboxInput from "../../../components/inputs/CheckboxInput";
 import CreateSelect from "../../../components/inputs/CreateSelect";
 import ImageUpload from "../../../components/inputs/ImageUpload";
 import InputField from "../../../components/inputs/InputField";
@@ -61,6 +62,8 @@ const EditListing = ({ listingId }: Props) => {
               contactInfo: listing.contactInfo,
               description: listing.description,
               schedule: listing.schedule,
+              online: listing.online,
+              inPerson: listing.inPerson,
             }}
             onSubmit={async (values, { setErrors }) => {
               try {
@@ -124,6 +127,13 @@ const EditListing = ({ listingId }: Props) => {
                     placeholder="Tell your potential students more about yourself."
                     label="Description"
                     textarea
+                  />
+                  <CheckboxInput
+                    label="Mode of Instruction"
+                    options={[
+                      { label: "Online", value: "online" },
+                      { label: "In Person", value: "inPerson" },
+                    ]}
                   />
                   <ScheduleInput name="schedule" label="Schedule" />
                   <PricingInput name="pricing" label="Pricing /hr" />

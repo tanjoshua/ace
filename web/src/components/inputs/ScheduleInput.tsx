@@ -31,9 +31,8 @@ const ScheduleInput = ({ label, ...props }: Props) => {
       <FieldArray {...props}>
         {({ insert, remove, push }) => (
           <Stack>
-            {field.value.map((element, index) => {
-              return (
-                <HStack>
+            {field.value.map((element, index) => (
+                <HStack key={index}>
                   <Text textTransform={"capitalize"} minWidth={40}>
                     {DAY[index]}
                   </Text>
@@ -70,7 +69,7 @@ const ScheduleInput = ({ label, ...props }: Props) => {
                   )}
                 </HStack>
               );
-            })}
+        ))}
           </Stack>
         )}
       </FieldArray>

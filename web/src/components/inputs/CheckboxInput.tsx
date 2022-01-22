@@ -20,10 +20,14 @@ const CheckboxInput = ({ label, options, ...props }: Props) => {
       <FormLabel>{label}</FormLabel>
       <HStack>
         {options.map((option) => (
-          <Field name={option.value}>
-            {({ field, form }) => (
-              <Checkbox {...field}>{option.label}</Checkbox>
-            )}
+          <Field name={option.value} key={option.value}>
+            {({ field, form }) => {
+              return (
+                <Checkbox {...field} isChecked={field.value}>
+                  {option.label}
+                </Checkbox>
+              );
+            }}
           </Field>
         ))}
       </HStack>
