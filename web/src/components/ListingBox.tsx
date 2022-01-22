@@ -41,6 +41,12 @@ const ListingBox = ({ listing }) => {
       </Flex>
       <Divider mt={2} />
       <Box mt={2}>
+        <Text>
+          Offers
+          {listing.online && " online"}
+          {listing.online && listing.inPerson && " and "}
+          {listing.inPerson && " in person "} lessons
+        </Text>
         <Text>${listing.pricing.rate}/hr</Text>
       </Box>
       <Divider mt={2} />

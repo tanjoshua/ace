@@ -76,7 +76,7 @@ export default function Simple() {
             direction={"row"}
             spacing={6}
           >
-            <NextLink href={`/login?next=${router.asPath}`} passHref>
+            <NextLink href={`/login`} passHref>
               <Button
                 as={"a"}
                 fontSize={"sm"}
@@ -86,7 +86,7 @@ export default function Simple() {
                 Login
               </Button>
             </NextLink>
-            <NextLink href={`/register?next=${router.asPath}`} passHref>
+            <NextLink href={`/register`} passHref>
               <Button
                 display={{ base: "none", md: "inline-flex" }}
                 fontSize={"sm"}
@@ -125,6 +125,9 @@ export default function Simple() {
                 </MenuItem>
                 <MenuItem as="a" href="/create-listing">
                   Create Listing
+                </MenuItem>
+                <MenuItem as="a" href="/dashboard">
+                  Dashboard
                 </MenuItem>
                 <MenuDivider />
                 <MenuItem
