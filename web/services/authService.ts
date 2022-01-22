@@ -1,7 +1,7 @@
 import axiosBase from "./base";
 
-const register = ({ email, password }) => {
-  return axiosBase.post("/auth/register", { email, password });
+const register = ({ name, email, password }) => {
+  return axiosBase.post("/auth/register", { name, email, password });
 };
 
 const login = ({ email, password }) => {

@@ -62,6 +62,7 @@ export const getListings = async (req: Request, res: Response) => {
   const listingsResult = listings.map((listing) => ({
     ...wrap(listing).toObject(),
     tutor: {
+      name: listing.tutor.name,
       id: listing.tutor.id,
     },
   }));
@@ -79,7 +80,7 @@ export const getListingDetails = async (req: Request, res: Response) => {
   // keep only relevant info for tutor
   const listingResult = {
     ...wrap(listing).toObject(),
-    tutor: { id: listing.tutor.id },
+    tutor: { name: listing.tutor.name, id: listing.tutor.id },
   };
 
   res.json(listingResult);

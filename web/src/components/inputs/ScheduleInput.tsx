@@ -32,43 +32,44 @@ const ScheduleInput = ({ label, ...props }: Props) => {
         {({ insert, remove, push }) => (
           <Stack>
             {field.value.map((element, index) => (
-              <HStack key={index}>
-                <Text textTransform={"capitalize"} minWidth={40}>
-                  {DAY[index]}
-                </Text>
-                {element !== null ? (
-                  <InputGroup>
-                    <Input
-                      placeholder="Eg. 9:00am - 5:00pm"
-                      name={`${field.name}.${index}`}
-                      onChange={(e) => {
-                        field.value[index] = e.target.value;
-                        setValue(field.value);
-                      }}
-                      value={field.value[index]}
-                    ></Input>
-                    <InputRightElement>
-                      <CloseButton
-                        onClick={() => {
-                          insert(index, null);
-                          remove(index + 1);
+                <HStack key={index}>
+                  <Text textTransform={"capitalize"} minWidth={40}>
+                    {DAY[index]}
+                  </Text>
+                  {element !== null ? (
+                    <InputGroup>
+                      <Input
+                        placeholder="Eg. 9:00am - 5:00pm"
+                        name={`${field.name}.${index}`}
+                        onChange={(e) => {
+                          field.value[index] = e.target.value;
+                          setValue(field.value);
                         }}
-                      />
-                    </InputRightElement>
-                  </InputGroup>
-                ) : (
-                  <Button
-                    leftIcon={<AddIcon />}
-                    onClick={() => {
-                      insert(index, "");
-                      remove(index + 1);
-                    }}
-                  >
-                    Add availability
-                  </Button>
-                )}
-              </HStack>
-            ))}
+                        value={field.value[index]}
+                      ></Input>
+                      <InputRightElement>
+                        <CloseButton
+                          onClick={() => {
+                            insert(index, null);
+                            remove(index + 1);
+                          }}
+                        />
+                      </InputRightElement>
+                    </InputGroup>
+                  ) : (
+                    <Button
+                      leftIcon={<AddIcon />}
+                      onClick={() => {
+                        insert(index, "");
+                        remove(index + 1);
+                      }}
+                    >
+                      Add availability
+                    </Button>
+                  )}
+                </HStack>
+              );
+        ))}
           </Stack>
         )}
       </FieldArray>
