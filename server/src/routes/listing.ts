@@ -9,6 +9,7 @@ import {
   getListingLevels,
   getListingSubjects,
   uploadListingImage,
+  getListingRegions,
 } from "../controllers/listing";
 import { Level } from "../entities";
 import auth from "../middleware/auth";
@@ -22,6 +23,8 @@ router.get("/", getListings);
 router.get("/levels", getListingLevels);
 
 router.get("/subjects", getListingSubjects);
+
+router.get("/regions", getListingRegions);
 
 router.get("/:id", getListingDetails);
 

@@ -61,3 +61,5 @@ export const subjects = [
   "Geography",
   "Economics",
 ];
+
+export const regions = ["West", "Central", "East", "North", "Northeast"];

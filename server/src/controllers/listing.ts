@@ -3,7 +3,7 @@ import { wrap } from "@mikro-orm/core";
 import { v2 as cloudinary } from "cloudinary";
 
 import { DI } from "../index";
-import { Listing, Level, subjects } from "../entities/Listing";
+import { Listing, Level, subjects, regions } from "../entities/Listing";
 import HttpError from "../errors/HttpError";
 
 require("express-async-errors");
@@ -178,5 +178,11 @@ export const getListingLevels = async (_req: Request, res: Response) => {
 export const getListingSubjects = async (_req: Request, res: Response) => {
   res.json({
     subjects,
+  });
+};
+
+export const getListingRegions = async (_req: Request, res: Response) => {
+  res.json({
+    regions,
   });
 };
