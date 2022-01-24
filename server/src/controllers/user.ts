@@ -46,3 +46,25 @@ export const getCurrentUser = async (req: Request, res: Response) => {
     res.json();
   }
 };
+
+export const getCurrentUserDetails = async (req: Request, res: Response) => {
+  const id = req.session.userId;
+
+  // get user details
+  if (id) {
+    const user = await DI.userRepository.findOne(id, ["listings"]);
+
+    if (!user) {
+      throw new HttpError(404, "User not found");
+    }
+
+    res.json({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      listings: user.listings,
+    });
+  } else {
+    res.json();
+  }
+};

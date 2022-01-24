@@ -37,7 +37,7 @@ const login = (props: Props) => {
           <Stack align={"center"}>
             <Heading fontSize={"4xl"}>Sign in to your account</Heading>
             <Text fontSize={"lg"} color={"gray.600"}>
-              to manage your listings️
+              to manage your listing
             </Text>
           </Stack>
           <Box
@@ -89,10 +89,12 @@ const login = (props: Props) => {
                     <Stack spacing={10}>
                       <Stack
                         direction={{ base: "column", sm: "row" }}
-                        align={"start"}
                         justify={"space-between"}
+                        alignItems={"center"}
                       >
-                        <Checkbox>Remember me</Checkbox>
+                        <NextLink href={`/register?next=${router.query.next}`}>
+                          <Button variant={"link"}>Create account</Button>
+                        </NextLink>
                         <NextLink href="/forgot-password">
                           <Link color={"blue.400"}>Forgot password?</Link>
                         </NextLink>

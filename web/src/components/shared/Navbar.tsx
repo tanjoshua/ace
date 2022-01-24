@@ -50,8 +50,18 @@ export default function Simple() {
   const user = response?.data;
 
   return (
-    <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
-      <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
+    <Box>
+      <Flex
+        bg={useColorModeValue("white", "gray.800")}
+        minH={"60px"}
+        py={{ base: 2 }}
+        px={{ base: 4 }}
+        borderBottom={1}
+        borderStyle={"solid"}
+        borderColor={useColorModeValue("gray.200", "gray.900")}
+        align={"center"}
+        justifyContent={"space-between"}
+      >
         <IconButton
           size={"md"}
           icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
@@ -76,7 +86,7 @@ export default function Simple() {
             direction={"row"}
             spacing={6}
           >
-            <NextLink href={`/login?next=${router.asPath}`} passHref>
+            <NextLink href={`/login`} passHref>
               <Button
                 as={"a"}
                 fontSize={"sm"}
@@ -86,7 +96,7 @@ export default function Simple() {
                 Login
               </Button>
             </NextLink>
-            <NextLink href={`/register?next=${router.asPath}`} passHref>
+            <NextLink href={`/register`} passHref>
               <Button
                 display={{ base: "none", md: "inline-flex" }}
                 fontSize={"sm"}
@@ -120,11 +130,11 @@ export default function Simple() {
                 />
               </MenuButton>
               <MenuList>
-                <MenuItem as="a" href={`/user/${user.id}`}>
-                  Profile
+                <MenuItem as="a" href={`/account`}>
+                  Account Settings
                 </MenuItem>
-                <MenuItem as="a" href="/create-listing">
-                  Create Listing
+                <MenuItem as="a" href="/dashboard">
+                  Dashboard
                 </MenuItem>
                 <MenuDivider />
                 <MenuItem

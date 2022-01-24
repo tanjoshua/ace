@@ -29,7 +29,16 @@ export class Listing extends BaseEntity {
   description: string;
 
   @Property()
+  schedule: string[];
+
+  @Property()
   contactInfo: string;
+
+  @Property()
+  online: boolean;
+
+  @Property()
+  inPerson: boolean;
 }
 
 export enum Level {

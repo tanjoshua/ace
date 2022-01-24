@@ -10,10 +10,12 @@ import {
   Button,
   Divider,
   Link,
+  HStack,
 } from "@chakra-ui/react";
 import React from "react";
 import listingService from "../../../services/listingService";
 import userService from "../../../services/userService";
+import { DAY } from "../../../utils/constants";
 import useFetch from "../../../utils/useFetch";
 import Navbar from "../../components/shared/Navbar";
 
@@ -26,6 +28,7 @@ const ListingPage = ({ listingId }: Props) => {
     listingService.getListingById(listingId)
   );
   const listing = response?.data;
+  console.log(listing);
 
   const [currentUserIsLoading, currentUserResponse, currentUserError] =
     useFetch(() => userService.getCurrentUser());
@@ -75,9 +78,37 @@ const ListingPage = ({ listingId }: Props) => {
           <Text>{listing.description}</Text>
           <Divider />
 
-          <Heading size="md">Pricing</Heading>
-          <Text>{listing.pricing.rate}/hr</Text>
-          <Text>{listing.pricing.details}</Text>
+          <Heading size="md">Schedule</Heading>
+          {listing.schedule.map(
+            (element, index) =>
+              element && (
+                <HStack key={index}>
+                  <Text textTransform={"capitalize"} minWidth={40}>
+                    {DAY[index]}
+                  </Text>
+                  <Text>{element}</Text>
+                </HStack>
+              )
+          )}
+          <Divider />
+
+          <Heading size="md">Lesson details</Heading>
+          <Text>
+            Offers
+            <Text as="span" fontWeight={"bold"}>
+              {listing.online && " online"}
+              {listing.online && listing.inPerson && " and "}
+              {listing.inPerson && " in person "}{" "}
+            </Text>
+            lessons
+          </Text>
+          <Text>
+            Hourly Rate:{" "}
+            <Text as="span" fontWeight={"bold"}>
+              ${listing.pricing.rate}/hr
+            </Text>
+          </Text>
+          <Text>Rate details: {listing.pricing.details}</Text>
           <Divider />
 
           <Heading size="md">Contact Information</Heading>

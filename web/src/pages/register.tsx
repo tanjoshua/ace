@@ -48,7 +48,11 @@ const register = (props: Props) => {
               onSubmit={async (values, { setErrors }) => {
                 try {
                   await authService.register(values);
-                  router.push("/");
+                  if (typeof router.query.next === "string") {
+                    router.push(router.query.next || "/");
+                  } else {
+                    router.push("/");
+                  }
                 } catch (error) {
                   const errors = error.response?.data?.errors;
                   if (errors) {

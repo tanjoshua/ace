@@ -1,20 +1,34 @@
 import { Button, Stack } from "@chakra-ui/react";
-import { Form, Formik } from "formik";
+import { Field, Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React from "react";
 import listingService from "../../services/listingService";
 import redirectIfNotAuth from "../../utils/redirectIfNotAuth";
 import { toErrorMap } from "../../utils/toErrorMap";
 import useFetch from "../../utils/useFetch";
+import CheckboxInput from "../components/inputs/CheckboxInput";
 import CreateSelect from "../components/inputs/CreateSelect";
 import ImageUpload from "../components/inputs/ImageUpload";
 import InputField from "../components/inputs/InputField";
 import Multiselect from "../components/inputs/Multiselect";
 import PricingInput from "../components/inputs/PricingInput";
+import ScheduleInput from "../components/inputs/ScheduleInput";
 
 import Navbar from "../components/shared/Navbar";
 
 interface Props {}
+
+const initialSchedule1 = [
+  { day: "monday", value: null },
+  { day: "tuesday", value: null },
+  { day: "wednesday", value: null },
+  { day: "thursday", value: null },
+  { day: "friday", value: null },
+  { day: "saturday", value: null },
+  { day: "sunday", value: null },
+];
+
+const initialSchedule = [null, null, null, null, null, null, null];
 
 const createListing = (props: Props) => {
   const router = useRouter();
@@ -50,6 +64,9 @@ const createListing = (props: Props) => {
             subject: [],
             contactInfo: "",
             description: "",
+            schedule: initialSchedule,
+            online: false,
+            inPerson: false,
           }}
           onSubmit={async (values, { setErrors }) => {
             try {
@@ -91,7 +108,7 @@ const createListing = (props: Props) => {
                 <ImageUpload name="image" />
                 <InputField
                   name="title"
-                  placeholder="Brief description"
+                  placeholder="Headline to grab attention"
                   label="Title"
                 />
                 <InputField
@@ -115,6 +132,14 @@ const createListing = (props: Props) => {
                   label="Description"
                   textarea
                 />
+                <CheckboxInput
+                  label="Mode of Instruction"
+                  options={[
+                    { label: "Online", value: "online" },
+                    { label: "In Person", value: "inPerson" },
+                  ]}
+                />
+                <ScheduleInput name="schedule" label="Schedule" />
                 <PricingInput name="pricing" label="Pricing /hr" />
                 <InputField
                   name="pricingDetails"
