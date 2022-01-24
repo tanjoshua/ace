@@ -7,7 +7,9 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
+import Link from "next/link";
 import React from "react";
+
 import userService from "../../services/userService";
 import redirectIfNotAuth from "../../utils/redirectIfNotAuth";
 import useFetch from "../../utils/useFetch";
@@ -34,7 +36,11 @@ const UserPage = ({}: Props) => {
           currentUser.listings.map((listing) => (
             <ListingBox listing={listing} key={listing.id} />
           ))}
-        <Divider />
+        {currentUser && currentUser.listings.length === 0 && (
+          <Link href="/create-listing">
+            <Button>Create Listing</Button>
+          </Link>
+        )}
       </Stack>
     </>
   );
