@@ -30,6 +30,14 @@ export const getListings = async (req: Request, res: Response) => {
     });
   }
 
+  if (!!req.query.online != !!req.query.inPerson) {
+    if (!!req.query.online) {
+      searchQuery.push({ online: true });
+    } else {
+      searchQuery.push({ inPerson: true });
+    }
+  }
+
   let filter = {};
   if (searchQuery.length !== 0) {
     filter = { $and: searchQuery };
