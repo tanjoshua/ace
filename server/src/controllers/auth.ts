@@ -116,9 +116,9 @@ export const resetPassword = async (req: Request, res: Response) => {
 };
 
 export const changeEmail = async (req: Request, res: Response) => {
-  const { password, email, newEmail } = req.body;
+  const { password, newEmail } = req.body;
   // verify user
-  const user = await DI.userRepository.findOne({ email });
+  const user = await DI.userRepository.findOne({ email: newEmail });
   if (user) {
     throw new HttpError(403, "Email is already in use");
   }

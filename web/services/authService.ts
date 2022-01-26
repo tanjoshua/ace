@@ -20,4 +20,20 @@ const resetPassword = ({ token, password }) => {
   return axiosBase.post("/auth/resetPassword", { token, password });
 };
 
-export default { register, login, logout, forgotPassword, resetPassword };
+const changeEmail = ({ password, newEmail }) => {
+  return axiosBase.post("/auth/changeEmail", { newEmail, password });
+};
+
+const changePassword = ({ oldPassword, newPassword }) => {
+  return axiosBase.post("/auth/changeEmail", { oldPassword, newPassword });
+};
+
+export default {
+  register,
+  login,
+  logout,
+  forgotPassword,
+  resetPassword,
+  changeEmail,
+  changePassword,
+};
