@@ -6,8 +6,11 @@ import {
   AccordionPanel,
   Box,
   Button,
+  ButtonGroup,
+  Checkbox,
   Divider,
   Flex,
+  FormControl,
   Grid,
   GridItem,
   HStack,
@@ -15,7 +18,8 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { Form, Formik } from "formik";
+import { Select } from "chakra-react-select";
+import { Field, Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React from "react";
 import listingService from "../../services/listingService";
@@ -38,8 +42,6 @@ const listingOrder = [
 const SearchPage = (props: Props) => {
   // handle search queries
   const router = useRouter();
-  const subjectQuery = router.query.subject;
-  const levelQuery = router.query.level;
 
   // load suggested level and subjects
   const [levelsIsLoading, levelsResponse, levelsError] = useFetch(() =>
@@ -56,6 +58,13 @@ const SearchPage = (props: Props) => {
     value: x,
     label: x,
   }));
+  const [regionsIsLoading, regionsResponse, regionsError] = useFetch(() =>
+    listingService.getRegions()
+  );
+  const regions = regionsResponse?.data.regions.map((x: string) => ({
+    value: x,
+    label: x,
+  }));
 
   return (
     <>
@@ -63,16 +72,18 @@ const SearchPage = (props: Props) => {
       <Box padding={5}>
         <Formik
           initialValues={{
-            subject: subjectQuery,
-            level: levelQuery,
+            subject: router.query.subject,
+            level: router.query.level,
             orderBy: null,
+            online: !!router.query.online,
+            inPerson: !!router.query.inPerson,
           }}
           onSubmit={async (values, { setErrors }) => {
             router.push({ pathname: "/search", query: values });
           }}
           enableReinitialize
         >
-          {({ isSubmitting }) => (
+          {({ isSubmitting, values }) => (
             <Form>
               <Stack>
                 <HStack alignItems="flex-end">
@@ -104,7 +115,64 @@ const SearchPage = (props: Props) => {
                     </AccordionButton>
                     <AccordionPanel>
                       <Grid templateColumns="repeat(3, 1fr)">
-                        <GridItem></GridItem>
+                        <GridItem>
+                          <Stack>
+                            <Text>Mode</Text>
+                            <Divider />
+                            <Checkbox
+                              isChecked={!!router.query.online}
+                              onChange={(e) =>
+                                router.replace({
+                                  pathname: "/search",
+                                  query: {
+                                    ...router.query,
+                                    online: e.target.checked ? true : null,
+                                    page: 1,
+                                  },
+                                })
+                              }
+                            >
+                              Online
+                            </Checkbox>
+                            <Checkbox
+                              isChecked={!!router.query.inPerson}
+                              onChange={(e) =>
+                                router.replace({
+                                  pathname: "/search",
+                                  query: {
+                                    ...router.query,
+                                    inPerson: e.target.checked ? true : null,
+                                    page: 1,
+                                  },
+                                })
+                              }
+                            >
+                              In Person
+                            </Checkbox>
+                            <HStack>
+                              <Text>Region</Text>
+                              <Box flex={1}>
+                                <Select
+                                  instanceId="region"
+                                  isClearable
+                                  isDisabled={!router.query.inPerson}
+                                  options={regionsIsLoading ? [] : regions}
+                                  onChange={(selected) => {
+                                    router.replace({
+                                      pathname: "/search",
+                                      query: {
+                                        ...router.query,
+                                        region: selected?.value,
+                                        page: 1,
+                                      },
+                                    });
+                                  }}
+                                  size="sm"
+                                />
+                              </Box>
+                            </HStack>
+                          </Stack>
+                        </GridItem>
                         <GridItem></GridItem>
                         <GridItem>
                           <Stack>
@@ -114,11 +182,14 @@ const SearchPage = (props: Props) => {
                               router.query.order === option.value ||
                               (!router.query.order &&
                                 option.value === "recent") ? (
-                                <Text fontWeight={"bold"}>{option.label}</Text>
+                                <Text fontWeight={"bold"} key={option.value}>
+                                  {option.label}
+                                </Text>
                               ) : (
                                 <Link
+                                  key={option.value}
                                   onClick={() =>
-                                    router.push({
+                                    router.replace({
                                       pathname: "/search",
                                       query: {
                                         ...router.query,

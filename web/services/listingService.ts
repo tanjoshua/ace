@@ -44,6 +44,10 @@ export const getSubjects = () => {
   return axiosBase.get(`/listing/subjects`);
 };
 
+export const getRegions = () => {
+  return axiosBase.get(`/listing/regions`);
+};
+
 export default {
   getListings,
   createListing,
@@ -53,4 +57,5 @@ export default {
   deleteListingById,
   getLevels,
   getSubjects,
+  getRegions,
 };

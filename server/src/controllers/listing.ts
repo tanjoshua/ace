@@ -3,7 +3,7 @@ import { wrap } from "@mikro-orm/core";
 import { v2 as cloudinary } from "cloudinary";
 
 import { DI } from "../index";
-import { Listing, Level, subjects } from "../entities/Listing";
+import { Listing, Level, subjects, regions } from "../entities/Listing";
 import HttpError from "../errors/HttpError";
 
 require("express-async-errors");
@@ -28,6 +28,19 @@ export const getListings = async (req: Request, res: Response) => {
         { description: { $re: req.query.subject } },
       ],
     });
+  }
+
+  if (!!req.query.online != !!req.query.inPerson) {
+    if (!!req.query.online) {
+      searchQuery.push({ online: true });
+    } else {
+      searchQuery.push({ inPerson: true });
+    }
+  }
+
+  // region filter
+  if (!!req.query.inPerson && req.query.region) {
+    searchQuery.push({ regions: req.query.region });
   }
 
   let filter = {};
@@ -178,5 +191,11 @@ export const getListingLevels = async (_req: Request, res: Response) => {
 export const getListingSubjects = async (_req: Request, res: Response) => {
   res.json({
     subjects,
+  });
+};
+
+export const getListingRegions = async (_req: Request, res: Response) => {
+  res.json({
+    regions,
   });
 };

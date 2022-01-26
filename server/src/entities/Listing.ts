@@ -39,6 +39,9 @@ export class Listing extends BaseEntity {
 
   @Property()
   inPerson: boolean;
+
+  @Property()
+  regions: string[];
 }
 
 export enum Level {
@@ -61,3 +64,5 @@ export const subjects = [
   "Geography",
   "Economics",
 ];
+
+export const regions = ["West", "Central", "East", "North", "Northeast"];

@@ -44,6 +44,13 @@ const EditListing = ({ listingId }: Props) => {
     value: x,
     label: x,
   }));
+  const [regionsIsLoading, regionsResponse, regionsError] = useFetch(() =>
+    listingService.getRegions()
+  );
+  const regions = regionsResponse?.data.regions.map((x: string) => ({
+    value: x,
+    label: x,
+  }));
 
   return (
     <>
@@ -64,6 +71,7 @@ const EditListing = ({ listingId }: Props) => {
               schedule: listing.schedule,
               online: listing.online,
               inPerson: listing.inPerson,
+              regions: listing.regions,
             }}
             onSubmit={async (values, { setErrors }) => {
               try {
@@ -98,7 +106,7 @@ const EditListing = ({ listingId }: Props) => {
               }
             }}
           >
-            {({ isSubmitting }) => (
+            {({ isSubmitting, values }) => (
               <Form>
                 <Stack>
                   <ImageUpload name="image" defaultImage={listing.image?.url} />
@@ -134,6 +142,12 @@ const EditListing = ({ listingId }: Props) => {
                       { label: "Online", value: "online" },
                       { label: "In Person", value: "inPerson" },
                     ]}
+                  />
+                  <Multiselect
+                    options={regionsIsLoading ? [] : regions}
+                    name="regions"
+                    label="Region(s)"
+                    isDisabled={!values.inPerson}
                   />
                   <ScheduleInput name="schedule" label="Schedule" />
                   <PricingInput name="pricing" label="Pricing /hr" />

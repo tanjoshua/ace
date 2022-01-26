@@ -46,6 +46,12 @@ const ListingBox = ({ listing }) => {
           {listing.online && " online"}
           {listing.online && listing.inPerson && " and "}
           {listing.inPerson && " in person "} lessons
+          {listing.inPerson &&
+            listing.regions &&
+            listing.regions.length > 0 &&
+            ` in the ${listing.regions.join(", ")} region${
+              listing.regions.length > 1 ? "s" : ""
+            }`}
         </Text>
         <Text>${listing.pricing.rate}/hr</Text>
       </Box>
