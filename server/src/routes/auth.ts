@@ -76,8 +76,16 @@ router.post(
   "/changeEmail",
   auth,
   [
-    body("email").notEmpty().isEmail(),
-    body("newEmail").notEmpty().isEmail(),
+    body("newEmail")
+      .notEmpty()
+      .isEmail()
+      .custom((value) => {
+        return DI.userRepository.findOne({ email: value }).then((user) => {
+          return user
+            ? Promise.reject("Email already in use")
+            : Promise.resolve();
+        });
+      }),
     body("password").notEmpty(),
   ],
   handleValidatorErrors,

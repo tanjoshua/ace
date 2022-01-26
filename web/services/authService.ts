@@ -25,7 +25,7 @@ const changeEmail = ({ password, newEmail }) => {
 };
 
 const changePassword = ({ oldPassword, newPassword }) => {
-  return axiosBase.post("/auth/changeEmail", { oldPassword, newPassword });
+  return axiosBase.post("/auth/changePassword", { oldPassword, newPassword });
 };
 
 export default {

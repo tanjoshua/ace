@@ -90,19 +90,25 @@ const AccountPage = (props: Props) => {
                     await authService.changeEmail(values);
                     router.reload();
                   } catch (error) {
-                    const errors = error.response?.data?.errors;
-                    if (errors) {
-                      setErrors(toErrorMap(errors));
+                    if (error.response?.status === 401) {
+                      setErrors({
+                        password: "Invalid credentials",
+                      });
+                    } else {
+                      const errors = error.response?.data?.errors;
+                      if (errors) {
+                        setErrors(toErrorMap(errors));
+                      }
                     }
                   }
                 }}
               >
-                {() => (
-                  <ModalContent>
-                    <ModalHeader>Change Email</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>
-                      <Form>
+                {({ isSubmitting }) => (
+                  <Form>
+                    <ModalContent>
+                      <ModalHeader>Change Email</ModalHeader>
+                      <ModalCloseButton />
+                      <ModalBody>
                         <Stack spacing={4}>
                           <InputField
                             name="newEmail"
@@ -116,13 +122,15 @@ const AccountPage = (props: Props) => {
                             type="password"
                           />
                         </Stack>
-                      </Form>
-                    </ModalBody>
+                      </ModalBody>
 
-                    <ModalFooter>
-                      <Button type="submit">Change Email</Button>
-                    </ModalFooter>
-                  </ModalContent>
+                      <ModalFooter>
+                        <Button type="submit" isLoading={isSubmitting}>
+                          Change Email
+                        </Button>
+                      </ModalFooter>
+                    </ModalContent>
+                  </Form>
                 )}
               </Formik>
             </Modal>
@@ -135,19 +143,25 @@ const AccountPage = (props: Props) => {
                     await authService.changePassword(values);
                     router.reload();
                   } catch (error) {
-                    const errors = error.response?.data?.errors;
-                    if (errors) {
-                      setErrors(toErrorMap(errors));
+                    if (error.response?.status === 401) {
+                      setErrors({
+                        oldPassword: "Invalid credentials",
+                      });
+                    } else {
+                      const errors = error.response?.data?.errors;
+                      if (errors) {
+                        setErrors(toErrorMap(errors));
+                      }
                     }
                   }
                 }}
               >
                 {() => (
-                  <ModalContent>
-                    <ModalHeader>Change Password</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>
-                      <Form>
+                  <Form>
+                    <ModalContent>
+                      <ModalHeader>Change Password</ModalHeader>
+                      <ModalCloseButton />
+                      <ModalBody>
                         <Stack spacing={4}>
                           <InputField
                             name="oldPassword"
@@ -163,13 +177,13 @@ const AccountPage = (props: Props) => {
                             autoComplete="new-password"
                           />
                         </Stack>
-                      </Form>
-                    </ModalBody>
+                      </ModalBody>
 
-                    <ModalFooter>
-                      <Button type="submit">Change Password</Button>
-                    </ModalFooter>
-                  </ModalContent>
+                      <ModalFooter>
+                        <Button type="submit">Change Password</Button>
+                      </ModalFooter>
+                    </ModalContent>
+                  </Form>
                 )}
               </Formik>
             </Modal>

@@ -15,12 +15,6 @@ require("express-async-errors");
 export const register = async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
 
-  // reject if email already exists
-  const existingUser = await DI.userRepository.findOne({ email });
-  if (existingUser) {
-    throw new HttpError(403, "Email is already used");
-  }
-
   const hashedPassword = await bcrypt.hash(password, 12);
 
   // create user
@@ -117,11 +111,6 @@ export const resetPassword = async (req: Request, res: Response) => {
 
 export const changeEmail = async (req: Request, res: Response) => {
   const { password, newEmail } = req.body;
-  // verify user
-  const user = await DI.userRepository.findOne({ email: newEmail });
-  if (user) {
-    throw new HttpError(403, "Email is already in use");
-  }
 
   // verify password
   const verified = await bcrypt.compare(password, req.user!.password);
@@ -137,10 +126,10 @@ export const changeEmail = async (req: Request, res: Response) => {
 };
 
 export const changePassword = async (req: Request, res: Response) => {
-  const { password, newPassword } = req.body;
+  const { oldPassword, newPassword } = req.body;
 
   // verify password
-  const verified = await bcrypt.compare(password, req.user!.password);
+  const verified = await bcrypt.compare(oldPassword, req.user!.password);
   if (!verified) {
     throw new HttpError(401, "Invalid credentials");
   }
