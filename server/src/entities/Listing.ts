@@ -39,6 +39,9 @@ export class Listing extends BaseEntity {
 
   @Property()
   inPerson: boolean;
+
+  @Property()
+  regions: string[];
 }
 
 export enum Level {

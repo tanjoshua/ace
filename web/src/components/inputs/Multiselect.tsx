@@ -7,6 +7,7 @@ interface Props {
   label: string;
   name: string;
   options: { value: string; label: string }[];
+  isDisabled?: boolean;
 }
 
 const Multiselect = ({ label, options, ...props }: Props) => {

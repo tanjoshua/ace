@@ -101,6 +101,15 @@ const ListingPage = ({ listingId }: Props) => {
               {listing.inPerson && " in person "}{" "}
             </Text>
             lessons
+            {listing.inPerson && listing.regions.length > 0 && (
+              <>
+                {" in the "}
+                <Text as="span" fontWeight={"bold"}>
+                  {listing.regions.join(", ")}
+                </Text>
+                {" region" + (listing.regions.length > 1 ? "s" : "")}
+              </>
+            )}
           </Text>
           <Text>
             Hourly Rate:{" "}

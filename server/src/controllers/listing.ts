@@ -38,6 +38,11 @@ export const getListings = async (req: Request, res: Response) => {
     }
   }
 
+  // region filter
+  if (!!req.query.inPerson && req.query.region) {
+    searchQuery.push({ regions: req.query.region });
+  }
+
   let filter = {};
   if (searchQuery.length !== 0) {
     filter = { $and: searchQuery };
