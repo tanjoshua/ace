@@ -114,3 +114,41 @@ export const resetPassword = async (req: Request, res: Response) => {
 
   res.json({ message: "success" });
 };
+
+export const changeEmail = async (req: Request, res: Response) => {
+  const { password, email, newEmail } = req.body;
+  // verify user
+  const user = await DI.userRepository.findOne({ email });
+  if (user) {
+    throw new HttpError(403, "Email is already in use");
+  }
+
+  // verify password
+  const verified = await bcrypt.compare(password, req.user!.password);
+  if (!verified) {
+    throw new HttpError(401, "Invalid credentials");
+  }
+
+  // replace email
+  req.user!.email = newEmail;
+  await DI.userRepository.flush();
+
+  res.json({ message: "success" });
+};
+
+export const changePassword = async (req: Request, res: Response) => {
+  const { password, newPassword } = req.body;
+
+  // verify password
+  const verified = await bcrypt.compare(password, req.user!.password);
+  if (!verified) {
+    throw new HttpError(401, "Invalid credentials");
+  }
+
+  // change password
+  const hashedPassword = await bcrypt.hash(newPassword, 12);
+  req.user!.password = hashedPassword;
+  await DI.userRepository.flush();
+
+  res.json({ message: "success" });
+};
