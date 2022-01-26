@@ -15,12 +15,6 @@ require("express-async-errors");
 export const register = async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
 
-  // reject if email already exists
-  const existingUser = await DI.userRepository.findOne({ email });
-  if (existingUser) {
-    throw new HttpError(403, "Email is already used");
-  }
-
   const hashedPassword = await bcrypt.hash(password, 12);
 
   // create user
@@ -111,6 +105,39 @@ export const resetPassword = async (req: Request, res: Response) => {
 
   // delete password reset token
   await DI.passwordResetRepository.removeAndFlush(pr);
+
+  res.json({ message: "success" });
+};
+
+export const changeEmail = async (req: Request, res: Response) => {
+  const { password, newEmail } = req.body;
+
+  // verify password
+  const verified = await bcrypt.compare(password, req.user!.password);
+  if (!verified) {
+    throw new HttpError(401, "Invalid credentials");
+  }
+
+  // replace email
+  req.user!.email = newEmail;
+  await DI.userRepository.flush();
+
+  res.json({ message: "success" });
+};
+
+export const changePassword = async (req: Request, res: Response) => {
+  const { oldPassword, newPassword } = req.body;
+
+  // verify password
+  const verified = await bcrypt.compare(oldPassword, req.user!.password);
+  if (!verified) {
+    throw new HttpError(401, "Invalid credentials");
+  }
+
+  // change password
+  const hashedPassword = await bcrypt.hash(newPassword, 12);
+  req.user!.password = hashedPassword;
+  await DI.userRepository.flush();
 
   res.json({ message: "success" });
 };

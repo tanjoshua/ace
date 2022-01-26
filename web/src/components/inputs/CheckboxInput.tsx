@@ -1,9 +1,12 @@
 import {
+  Box,
   Checkbox,
   CheckboxGroup,
   FormControl,
+  FormErrorMessage,
   FormLabel,
   HStack,
+  Stack,
 } from "@chakra-ui/react";
 import { CreatableSelect } from "chakra-react-select";
 import { Field, FieldArray, useField } from "formik";
@@ -16,22 +19,29 @@ interface Props {
 
 const CheckboxInput = ({ label, options, ...props }: Props) => {
   return (
-    <FormControl>
+    <>
       <FormLabel>{label}</FormLabel>
-      <HStack>
+      <Stack>
         {options.map((option) => (
           <Field name={option.value} key={option.value}>
             {({ field, form }) => {
               return (
-                <Checkbox {...field} isChecked={field.value}>
-                  {option.label}
-                </Checkbox>
+                <Box>
+                  <FormControl isInvalid={!!form.errors[option.value]}>
+                    <FormErrorMessage>
+                      {form.errors[option.value]}
+                    </FormErrorMessage>
+                    <Checkbox {...field} isChecked={field.value}>
+                      {option.label}
+                    </Checkbox>
+                  </FormControl>
+                </Box>
               );
             }}
           </Field>
         ))}
-      </HStack>
-    </FormControl>
+      </Stack>
+    </>
   );
 };
 

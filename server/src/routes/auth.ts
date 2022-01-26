@@ -8,8 +8,11 @@ import {
   logout,
   forgotPassword,
   resetPassword,
+  changeEmail,
+  changePassword,
 } from "../controllers/auth";
 import handleValidatorErrors from "../middleware/handleValidatorErrors";
+import auth from "../middleware/auth";
 
 const router = Router();
 
@@ -52,6 +55,7 @@ router.post("/logout", logout);
 router.post(
   "/forgotPassword",
   [body("email").isEmail().normalizeEmail().withMessage("Enter a valid email")],
+  handleValidatorErrors,
   forgotPassword
 );
 
@@ -64,7 +68,36 @@ router.post(
       .isLength({ min: 6 })
       .withMessage("Password must be at least 6 characters"),
   ],
+  handleValidatorErrors,
   resetPassword
+);
+
+router.post(
+  "/changeEmail",
+  auth,
+  [
+    body("newEmail")
+      .notEmpty()
+      .isEmail()
+      .custom((value) => {
+        return DI.userRepository.findOne({ email: value }).then((user) => {
+          return user
+            ? Promise.reject("Email already in use")
+            : Promise.resolve();
+        });
+      }),
+    body("password").notEmpty(),
+  ],
+  handleValidatorErrors,
+  changeEmail
+);
+
+router.post(
+  "/changePassword",
+  auth,
+  [body("oldPassword").notEmpty(), body("newPassword").notEmpty()],
+  handleValidatorErrors,
+  changePassword
 );
 
 export default router;

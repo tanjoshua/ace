@@ -40,6 +40,15 @@ router.post(
     body("contactInfo")
       .notEmpty()
       .withMessage("Contact information is required"),
+    body("online").custom((value, { req }) => {
+      if (value || req.body.inPerson) {
+        return true;
+      } else {
+        throw new Error(
+          "At least one of online or in person has to be selected"
+        );
+      }
+    }),
   ],
   handleValidatorErrors,
   createListing
