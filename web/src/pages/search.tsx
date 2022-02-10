@@ -157,6 +157,13 @@ const SearchPage = (props: Props) => {
                                   isClearable
                                   isDisabled={!router.query.inPerson}
                                   options={regionsIsLoading ? [] : regions}
+                                  value={
+                                    regions &&
+                                    regions.find(
+                                      (option) =>
+                                        option.value === router.query.region
+                                    )
+                                  }
                                   onChange={(selected) => {
                                     router.replace({
                                       pathname: "/search",
