@@ -61,7 +61,7 @@ const Index = () => {
             <Formik
               initialValues={{ subject: "" }}
               onSubmit={(values) => {
-                router.push({ pathname: "/search", query: values });
+                router.push({ pathname: "/match", query: values });
               }}
               enableReinitialize
             >
